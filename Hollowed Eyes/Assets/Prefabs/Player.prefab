@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1153972621328283169}
   - component: {fileID: 7000530165768044900}
   - component: {fileID: 7481406432724861990}
+  - component: {fileID: -3345958093588916307}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -178,3 +179,16 @@ MonoBehaviour:
   groundCheck: {fileID: 0}
   groundCheckRadius: 0.52
   mask: 1
+--- !u!114 &-3345958093588916307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822191687436670633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 286555de803570745bcf7ff664ef9b4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerMaskController
+  activeMask: 0

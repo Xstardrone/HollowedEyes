@@ -1,0 +1,48 @@
+{
+  "masks": [
+    {
+      "maskName": "Basic",
+      "maskNumber": 1,
+      "unlockLevel": 1,
+      "description": "Reveals base platforms.",
+      "iconPath": "BasicMask",
+      "playerImagePath": "BasicMask",
+      "lockPath": "Lock",
+      "keybind": "1",
+      "uiColor": "#EAEAEA"
+    },
+    {
+      "maskName": "Trap",
+      "maskNumber": 2,
+      "unlockLevel": 2,
+      "description": "Reveals traps and allows time slowdown.",
+      "iconPath": "TrapMask",
+      "playerImagePath": "TrapMask",
+      "lockPath": "Lock",
+      "keybind": "2",
+      "uiColor": "#FF3A3A"
+    },
+    {
+      "maskName": "Rope",
+      "maskNumber": 3,
+      "unlockLevel": 3,
+      "description": "Shoot ropes to nodes and swing across gaps.",
+      "iconPath": "RopeMask",
+      "playerImagePath": "RopeMask",
+      "lockPath": "Lock",
+      "keybind": "3",
+      "uiColor": "#7C3AED"
+    },
+    {
+      "maskName": "Phase",
+      "maskNumber": 4,
+      "unlockLevel": 4,
+      "description": "Phase through special blocks for a short time.",
+      "iconPath": "PhaseMask",
+      "playerImagePath": "PhaseMask",
+      "lockPath": "Lock",
+      "keybind": "4",
+      "uiColor": "#FACC15"
+    }
+  ]
+}
