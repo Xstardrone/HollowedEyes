@@ -57,7 +57,8 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(hasJumps);
+
+        Debug.Log("Has Jumps: " + hasJumps);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         if (isGrounded && refillJumps)
         {
