@@ -9,8 +9,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.5f;
 
-    public int mask = 1;
+    private int baseJumps = 1;
     private int hasJumps;
+    private int bonusJumpsUsedThisAir = 0;  // Track bonus jumps used this airtime
     private bool refillJumps;
     
     private Rigidbody2D rb;
@@ -43,15 +44,24 @@ public class PlayerMovement : MonoBehaviour
             collider.size = new Vector2(1f, 1f);
         }
 
-        if (mask == 1)
-        {
-            hasJumps = 2;
-        } else
-        {
-            hasJumps = 1;
-        }
-
+        RefillJumpsToMax();
         refillJumps = true;
+    }
+    
+    int GetMaxJumps()
+    {
+        int bonus = 0;
+        if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.CanUseBonusJump())
+        {
+            bonus = 1;
+        }
+        return baseJumps + bonus;
+    }
+    
+    void RefillJumpsToMax()
+    {
+        hasJumps = GetMaxJumps();
+        bonusJumpsUsedThisAir = 0;
     }
 
     void Update()
@@ -61,17 +71,10 @@ public class PlayerMovement : MonoBehaviour
         // Refill jumps when landing
         if (isGrounded && refillJumps)
         {
-            if (mask == 1)
-            {
-                hasJumps = 2;
-            }
-            else
-            {
-                hasJumps = 1;
-            }
+            RefillJumpsToMax();
         }
         
-        // Get horizontal input - this should work now
+        // Get horizontal input
         horizontalInput = 0f;
         if (Keyboard.current != null)
         {
@@ -83,9 +86,24 @@ public class PlayerMovement : MonoBehaviour
         
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
         
-        // Jump - removed isGrounded check, only check hasJumps
+        // Jump
         if (Keyboard.current != null && (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && hasJumps > 0)
         {
+            // Check if this is a bonus jump (using more than base jumps)
+            int jumpsUsed = (GetMaxJumps() - hasJumps);
+            bool isBonusJump = jumpsUsed >= baseJumps;
+            
+            if (isBonusJump && PlayerMaskController.Instance != null)
+            {
+                // Consume a mask use for the bonus jump
+                if (!PlayerMaskController.Instance.UseBonusJump())
+                {
+                    // No uses left, can't do bonus jump
+                    return;
+                }
+                bonusJumpsUsedThisAir++;
+            }
+            
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             hasJumps--;
             refillJumps = false;

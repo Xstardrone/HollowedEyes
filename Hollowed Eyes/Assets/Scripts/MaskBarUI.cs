@@ -98,6 +98,5 @@ public class MaskBarUI : MonoBehaviour
             slot.Setup(mask, mask.keybind);
         }
         
-        Debug.Log("[MaskBarUI] Finished creating all mask slots");
     }
 }

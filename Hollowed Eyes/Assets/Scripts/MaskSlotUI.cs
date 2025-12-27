@@ -5,16 +5,18 @@ using TMPro;
 public class MaskSlotUI : MonoBehaviour
 {
     [Header("Size Settings")]
-    public float slotSize = 80f;      // Size of the background box
-    public float iconSize = 64f;      // Size of the mask icon (independent of slot)
-    public float lockSize = 40f;      // Size of the lock overlay
-    public float keybindFontSize = 18f;
+    public float slotSize = 80f;
+    public float iconSize = 64f;
+    public float lockSize = 40f;
+    public float keybindFontSize = 22f;
+    public float usesFontSize = 22f;
     
     [Header("References (Auto-created if null)")]
     public Image border;
     public Image icon;
     public Image lockOverlay;
     public TMP_Text keybindText;
+    public TMP_Text usesText;
 
     MaskData data;
 
@@ -57,12 +59,11 @@ public class MaskSlotUI : MonoBehaviour
 
     void CreateUIElements()
     {
-        // Set up this slot's RectTransform
         RectTransform slotRect = GetComponent<RectTransform>();
         if (slotRect == null) slotRect = gameObject.AddComponent<RectTransform>();
         slotRect.sizeDelta = new Vector2(slotSize, slotSize);
         
-        // 1. Create or get Border (background)
+        // 1. Border (background)
         if (border == null)
         {
             border = CreateChildImage("Border", slotRect);
@@ -71,53 +72,68 @@ public class MaskSlotUI : MonoBehaviour
         SetStretchFill(border.rectTransform);
         border.transform.SetAsFirstSibling();
         
-        // 2. Create or get Icon
+        // 2. Icon
         if (icon == null)
         {
             icon = CreateChildImage("Icon", slotRect);
             icon.color = Color.white;
         }
-        // ALWAYS apply size
         icon.rectTransform.sizeDelta = new Vector2(iconSize, iconSize);
         icon.rectTransform.anchoredPosition = Vector2.zero;
         CenterAnchor(icon.rectTransform);
         
-        // 3. Create or get Lock Overlay
+        // 3. Lock Overlay
         if (lockOverlay == null)
         {
             lockOverlay = CreateChildImage("Lock Overlay", slotRect);
             lockOverlay.color = Color.white;
         }
-        // ALWAYS apply size
         lockOverlay.rectTransform.sizeDelta = new Vector2(lockSize, lockSize);
         lockOverlay.rectTransform.anchoredPosition = Vector2.zero;
         CenterAnchor(lockOverlay.rectTransform);
         
-        // 4. Create or get Keybind Text
+        // 4. Uses Text (bottom LEFT, black)
+        if (usesText == null)
+        {
+            GameObject usesObj = new GameObject("Uses");
+            usesObj.transform.SetParent(slotRect, false);
+            usesText = usesObj.AddComponent<TextMeshProUGUI>();
+            usesText.fontStyle = FontStyles.Bold;
+            usesText.alignment = TextAlignmentOptions.BottomLeft;
+            usesText.color = Color.black;
+        }
+        usesText.fontSize = usesFontSize;
+        usesText.rectTransform.anchorMin = new Vector2(0, 0);
+        usesText.rectTransform.anchorMax = new Vector2(0.5f, 0.3f);
+        usesText.rectTransform.pivot = new Vector2(0, 0);
+        usesText.rectTransform.sizeDelta = Vector2.zero;
+        usesText.rectTransform.anchoredPosition = new Vector2(4, 2);
+        
+        // 5. Keybind Text (bottom RIGHT, white)
         if (keybindText == null)
         {
             GameObject keybindObj = new GameObject("Keybind");
             keybindObj.transform.SetParent(slotRect, false);
             keybindText = keybindObj.AddComponent<TextMeshProUGUI>();
             keybindText.fontStyle = FontStyles.Bold;
-            keybindText.alignment = TextAlignmentOptions.Center;
+            keybindText.alignment = TextAlignmentOptions.BottomRight;
             keybindText.color = Color.white;
             keybindText.outlineWidth = 0.2f;
             keybindText.outlineColor = Color.black;
         }
-        // ALWAYS apply font size
         keybindText.fontSize = keybindFontSize;
-        keybindText.rectTransform.anchorMin = new Vector2(0, 0);
-        keybindText.rectTransform.anchorMax = new Vector2(1, 0);
-        keybindText.rectTransform.pivot = new Vector2(0.5f, 0);
-        keybindText.rectTransform.sizeDelta = new Vector2(0, 24);
-        keybindText.rectTransform.anchoredPosition = new Vector2(0, 4);
+        keybindText.rectTransform.anchorMin = new Vector2(0.5f, 0);
+        keybindText.rectTransform.anchorMax = new Vector2(1, 0.3f);
+        keybindText.rectTransform.pivot = new Vector2(1, 0);
+        keybindText.rectTransform.sizeDelta = Vector2.zero;
+        keybindText.rectTransform.anchoredPosition = new Vector2(-4, 2);
         
-        // Ensure correct rendering order
+        // Correct rendering order
         border.transform.SetSiblingIndex(0);
         icon.transform.SetSiblingIndex(1);
         lockOverlay.transform.SetSiblingIndex(2);
-        keybindText.transform.SetSiblingIndex(3);
+        usesText.transform.SetSiblingIndex(3);
+        keybindText.transform.SetSiblingIndex(4);
     }
     
     Image CreateChildImage(string name, Transform parent)
@@ -158,9 +174,15 @@ public class MaskSlotUI : MonoBehaviour
         {
             icon.color = unlocked ? Color.white : new Color(0.5f, 0.5f, 0.5f, 1f);
         }
+        
+        // Update uses count
+        if (usesText != null && PlayerMaskController.Instance != null)
+        {
+            int uses = PlayerMaskController.Instance.GetUsesForMask(data.maskNumber);
+            usesText.text = uses.ToString();
+        }
     }
     
-    // Public method to refresh state when level changes
     public void RefreshState()
     {
         if (data != null)

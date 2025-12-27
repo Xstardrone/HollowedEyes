@@ -1,26 +1,169 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class PlayerMaskController : MonoBehaviour
 {
     public static PlayerMaskController Instance;
     
-    public int activeMask;
+    public int activeMask = 1;
+    
+    // Mask uses remaining for current level
+    public Dictionary<int, int> maskUses = new Dictionary<int, int>();
+    
+    // Hardcoded uses per level: maskUsesPerLevel[level][maskNumber] = uses
+    public static Dictionary<int, Dictionary<int, int>> maskUsesPerLevel = new Dictionary<int, Dictionary<int, int>>
+    {
+        { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
+        { 2, new Dictionary<int, int> { {1, 2}, {2, 1}, {3, 0}, {4, 0} } },
+        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 1}, {4, 0} } },
+        { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 1} } },
+        { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 2} } },
+    };
 
     MaskDatabase database;
     int lastKnownLevel = -1;
     bool isReady = false;
+    
+    // Trap ability (time slow)
+    bool isTimeSlowed = false;
+    float timeSlowEndTime = 0f;
+    float originalTimeScale = 1f;
+    float originalFixedDeltaTime;
 
     void Awake()
     {
-
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
         Instance = this;
+        originalFixedDeltaTime = Time.fixedDeltaTime;
     }
 
     void Start()
     {
         LoadMasks();
-        activeMask = 1;
-        Debug.Log("PlayerMaskController ready - press 1/2/3/4 to switch masks");
+        InitializeForLevel();
+    }
+
+    void Update()
+    {
+        
+        if (!isReady)
+        {
+            Debug.Log("Not ready - database not loaded");
+            return;
+        }
+
+        // NEW Input System for mask switching
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.digit1Key.wasPressedThisFrame)
+            {
+                TrySwitch(1);
+            }
+            if (Keyboard.current.digit2Key.wasPressedThisFrame)
+            {
+                TrySwitch(2);
+            }
+            if (Keyboard.current.digit3Key.wasPressedThisFrame)
+            {
+                TrySwitch(3);
+            }
+            if (Keyboard.current.digit4Key.wasPressedThisFrame)
+            {
+                TrySwitch(4);
+            }
+            
+            // E key for ability with NEW Input System
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+            {
+                Debug.Log("E key pressed! Active mask: " + activeMask);
+                HandleAbility();
+            }
+        }
+
+        CheckLevelChange();
+        UpdateTimeSlow();
+    }
+    
+    void InitializeForLevel()
+    {
+        if (LevelGetter.Instance == null)
+        {
+            return;
+        }
+        
+        int level = LevelGetter.Instance.CurrentLevel;
+        activeMask = Mathf.Clamp(level, 1, 4);
+        LoadUsesForLevel(level);
+        lastKnownLevel = level;
+    }
+    
+    void LoadUsesForLevel(int level)
+    {
+        maskUses.Clear();
+        
+        if (maskUsesPerLevel.ContainsKey(level))
+        {
+            foreach (var pair in maskUsesPerLevel[level])
+            {
+                maskUses[pair.Key] = pair.Value;
+            }
+        }
+        else
+        {
+            for (int i = 1; i <= 4; i++)
+            {
+                maskUses[i] = (i <= level) ? 2 : 0;
+            }
+        }
+        
+        RefreshAllMaskSlots();
+    }
+    
+    public int GetUsesForMask(int maskNumber)
+    {
+        return maskUses.ContainsKey(maskNumber) ? maskUses[maskNumber] : 0;
+    }
+    
+    public bool UseOneMask(int maskNumber)
+    {
+        if (maskUses.ContainsKey(maskNumber) && maskUses[maskNumber] > 0)
+        {
+            maskUses[maskNumber]--;
+            RefreshAllMaskSlots();
+            return true;
+        }
+        return false;
+    }
+    
+    // Check if bonus jump is available (has uses left for Basic mask)
+    public bool CanUseBonusJump()
+    {
+        return activeMask == 1 && GetUsesForMask(1) > 0;
+    }
+    
+    // Consume a use when bonus jump is used
+    public bool UseBonusJump()
+    {
+        if (activeMask == 1)
+        {
+            return UseOneMask(1);
+        }
+        return false;
+    }
+    
+    // Returns bonus jumps if Basic mask is equipped AND has uses
+    public int GetBonusJumps()
+    {
+        if (activeMask == 1 && GetUsesForMask(1) > 0)
+        {
+            return 1;
+        }
+        return 0;
     }
 
     void LoadMasks()
@@ -28,99 +171,63 @@ public class PlayerMaskController : MonoBehaviour
         TextAsset json = Resources.Load<TextAsset>("Data/masks");
         if (json == null)
         {
-            Debug.LogError("Failed to load masks.json!");
+            Debug.LogError("Could not load masks.json from Resources/Data/");
             return;
         }
         
         database = JsonUtility.FromJson<MaskDatabase>(json.text);
         if (database == null || database.masks == null)
         {
-            Debug.LogError("Failed to parse masks!");
+            Debug.LogError("Failed to parse masks database");
             return;
         }
+        
         isReady = true;
     }
 
-    void Update()
+    void UpdateTimeSlow()
     {
-        if (!isReady) return;
-        
-        // Check for level changes
-        CheckLevelChange();
-        
-        // Handle input - log ANY key to verify input is working
-        if (Input.anyKeyDown)
+        if (isTimeSlowed && Time.unscaledTime >= timeSlowEndTime)
         {
-            Debug.Log($"Key pressed: {Input.inputString}");
+            EndTimeSlow();
         }
-        
-        HandleMaskSwitch();
-        HandleAbility();
     }
     
     void CheckLevelChange()
     {
-        if (LevelGetter.Instance == null)
-        {
-            Debug.LogWarning("LevelGetter.Instance is null!");
-            return;
-        }
+        if (LevelGetter.Instance == null) return;
         
         int currentLevel = LevelGetter.Instance.CurrentLevel;
         if (currentLevel != lastKnownLevel)
         {
-            Debug.Log($"Level changed from {lastKnownLevel} to {currentLevel}");
             lastKnownLevel = currentLevel;
-            // Notify UI to refresh lock states
-            RefreshAllMaskSlots();
+            activeMask = Mathf.Clamp(currentLevel, 1, 4);
+            LoadUsesForLevel(currentLevel);
         }
     }
     
     void RefreshAllMaskSlots()
     {
-        // Find all MaskSlotUI and refresh them
         MaskSlotUI[] slots = FindObjectsOfType<MaskSlotUI>();
-        Debug.Log($"Found {slots.Length} mask slots to refresh");
         foreach (var slot in slots)
         {
             slot.RefreshState();
         }
     }
 
-    void HandleMaskSwitch()
-    {
-        // Check number keys (both alpha and numpad)
-        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            Debug.Log("Key 1 detected!");
-            TrySwitch(1);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2) || Input.GetKeyDown(KeyCode.Keypad2))
-        {
-            Debug.Log("Key 2 detected!");
-            TrySwitch(2);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3) || Input.GetKeyDown(KeyCode.Keypad3))
-        {
-            Debug.Log("Key 3 detected!");
-            TrySwitch(3);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha4) || Input.GetKeyDown(KeyCode.Keypad4))
-        {
-            Debug.Log("Key 4 detected!");
-            TrySwitch(4);
-        }
-    }
-
     void TrySwitch(int maskNumber)
     {
+        
         if (LevelGetter.Instance == null)
         {
-            Debug.LogError("LevelGetter not found!");
             return;
         }
         
-        // Find the mask data
+        if (database == null || database.masks == null)
+        {
+            return;
+        }
+        
         MaskData mask = null;
         foreach (MaskData m in database.masks)
         {
@@ -133,23 +240,20 @@ public class PlayerMaskController : MonoBehaviour
         
         if (mask == null)
         {
-            Debug.LogError($"Mask {maskNumber} not found in database!");
             return;
         }
         
+        
         if (LevelGetter.Instance.CurrentLevel < mask.unlockLevel)
         {
-            Debug.Log($"{mask.maskName} mask is locked");
             return;
         }
 
         activeMask = mask.maskNumber;
-        Debug.Log($"Switched to {mask.maskName} mask");
     }
 
     void HandleAbility()
     {
-        if (!Input.GetKeyDown(KeyCode.E)) return;
         
         switch (activeMask)
         {
@@ -162,21 +266,69 @@ public class PlayerMaskController : MonoBehaviour
             case 4:
                 UsePhase();
                 break;
+            default:
+                break;
         }
     }
 
     void UseTrap()
     {
-        // will do
+        
+        if (isTimeSlowed)
+        {
+            return;
+        }
+        if (GetUsesForMask(2) <= 0)
+        {
+            return;
+        }
+        
+        if (UseOneMask(2))
+        {
+            StartTimeSlow();
+        }
+    }
+    
+    void StartTimeSlow()
+    {
+        isTimeSlowed = true;
+        originalTimeScale = Time.timeScale;
+        
+        Time.timeScale = originalTimeScale / 3f;
+        Time.fixedDeltaTime = originalFixedDeltaTime * Time.timeScale;
+        
+        timeSlowEndTime = Time.unscaledTime + 1f;
+    }
+    
+    void EndTimeSlow()
+    {
+        isTimeSlowed = false;
+        Time.timeScale = originalTimeScale;
+        Time.fixedDeltaTime = originalFixedDeltaTime;
+    }
+    
+    void OnDestroy()
+    {
+        if (isTimeSlowed)
+        {
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = originalFixedDeltaTime;
+        }
     }
     
     void UseRope()
     {
-        // rishiiiii
+        if (GetUsesForMask(3) <= 0)
+        {
+            return;
+        }
     }
     
     void UsePhase()
     {
-        //need to implement
+        if (GetUsesForMask(4) <= 0)
+        {
+            return;
+        }
     }
 }
