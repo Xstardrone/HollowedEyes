@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -8,6 +9,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.5f;
+
+    public int mask = 1;
+    private int hasJumps;
+    private bool refillJumps;
     
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -38,11 +43,34 @@ public class PlayerMovement : MonoBehaviour
             BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
             collider.size = new Vector2(1f, 1f);
         }
+
+        if (mask == 1)
+        {
+            hasJumps = 2;
+        } else
+        {
+            hasJumps = 1;
+        }
+
+        refillJumps = true;
     }
 
     void Update()
     {
+
+        Debug.Log("Has Jumps: " + hasJumps);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        if (isGrounded && refillJumps)
+        {
+            if (mask == 1)
+            {
+                hasJumps = 2;
+            }
+            else
+            {
+                hasJumps = 1;
+            }
+        }
         
         // Get horizontal input using new Input System
         horizontalInput = Input.GetAxisRaw("Horizontal");
@@ -52,9 +80,12 @@ public class PlayerMovement : MonoBehaviour
         if ((Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            hasJumps--;
+            refillJumps = false;
+            Invoke("enableRefillJumps", 0.1f);
         }
     }
-    
+
     void OnDrawGizmosSelected()
     {
         if (groundCheck != null)
@@ -62,5 +93,10 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
+    }
+
+    void enableRefillJumps()
+    {
+        refillJumps = true;
     }
 }
