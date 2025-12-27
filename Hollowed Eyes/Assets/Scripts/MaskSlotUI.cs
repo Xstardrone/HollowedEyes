@@ -11,6 +11,9 @@ public class MaskSlotUI : MonoBehaviour
     public float keybindFontSize = 22f;
     public float usesFontSize = 22f;
     
+    [Header("Font Settings")]
+    public TMP_FontAsset customFont;
+    
     [Header("References (Auto-created if null)")]
     public Image border;
     public Image icon;
@@ -63,7 +66,13 @@ public class MaskSlotUI : MonoBehaviour
         if (slotRect == null) slotRect = gameObject.AddComponent<RectTransform>();
         slotRect.sizeDelta = new Vector2(slotSize, slotSize);
         
-        // 1. Border (background)
+        // Load font if not assigned
+        if (customFont == null)
+        {
+            customFont = Resources.Load<TMP_FontAsset>("Fonts/Robot-Bold SDF");
+        }
+        
+        //Border (background)
         if (border == null)
         {
             border = CreateChildImage("Border", slotRect);
@@ -72,7 +81,7 @@ public class MaskSlotUI : MonoBehaviour
         SetStretchFill(border.rectTransform);
         border.transform.SetAsFirstSibling();
         
-        // 2. Icon
+        //Icon
         if (icon == null)
         {
             icon = CreateChildImage("Icon", slotRect);
@@ -82,7 +91,7 @@ public class MaskSlotUI : MonoBehaviour
         icon.rectTransform.anchoredPosition = Vector2.zero;
         CenterAnchor(icon.rectTransform);
         
-        // 3. Lock Overlay
+        //Lock Overlay
         if (lockOverlay == null)
         {
             lockOverlay = CreateChildImage("Lock Overlay", slotRect);
@@ -92,36 +101,50 @@ public class MaskSlotUI : MonoBehaviour
         lockOverlay.rectTransform.anchoredPosition = Vector2.zero;
         CenterAnchor(lockOverlay.rectTransform);
         
-        // 4. Uses Text (bottom LEFT, black)
+        //Uses Text (bottom LEFT, black)
         if (usesText == null)
         {
             GameObject usesObj = new GameObject("Uses");
             usesObj.transform.SetParent(slotRect, false);
             usesText = usesObj.AddComponent<TextMeshProUGUI>();
-            usesText.fontStyle = FontStyles.Bold;
-            usesText.alignment = TextAlignmentOptions.BottomLeft;
-            usesText.color = Color.black;
+        }
+        
+        // Apply font and settings
+        if (customFont != null)
+        {
+            usesText.font = customFont;
         }
         usesText.fontSize = usesFontSize;
+        usesText.fontStyle = FontStyles.Bold;
+        usesText.alignment = TextAlignmentOptions.BottomLeft;
+        usesText.color = Color.black;
+        usesText.enableAutoSizing = false;
         usesText.rectTransform.anchorMin = new Vector2(0, 0);
         usesText.rectTransform.anchorMax = new Vector2(0.5f, 0.3f);
         usesText.rectTransform.pivot = new Vector2(0, 0);
         usesText.rectTransform.sizeDelta = Vector2.zero;
         usesText.rectTransform.anchoredPosition = new Vector2(4, 2);
         
-        // 5. Keybind Text (bottom RIGHT, white)
+        //Keybind Text (bottom RIGHT, white)
         if (keybindText == null)
         {
             GameObject keybindObj = new GameObject("Keybind");
             keybindObj.transform.SetParent(slotRect, false);
             keybindText = keybindObj.AddComponent<TextMeshProUGUI>();
-            keybindText.fontStyle = FontStyles.Bold;
-            keybindText.alignment = TextAlignmentOptions.BottomRight;
-            keybindText.color = Color.white;
-            keybindText.outlineWidth = 0.2f;
-            keybindText.outlineColor = Color.black;
+        }
+        
+        // Apply font and settings
+        if (customFont != null)
+        {
+            keybindText.font = customFont;
         }
         keybindText.fontSize = keybindFontSize;
+        keybindText.fontStyle = FontStyles.Bold;
+        keybindText.alignment = TextAlignmentOptions.BottomRight;
+        keybindText.color = Color.white;
+        keybindText.outlineWidth = 0.2f;
+        keybindText.outlineColor = Color.black;
+        keybindText.enableAutoSizing = false;
         keybindText.rectTransform.anchorMin = new Vector2(0.5f, 0);
         keybindText.rectTransform.anchorMax = new Vector2(1, 0.3f);
         keybindText.rectTransform.pivot = new Vector2(1, 0);

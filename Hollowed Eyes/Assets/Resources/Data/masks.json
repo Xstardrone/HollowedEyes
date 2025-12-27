@@ -9,7 +9,8 @@
       "playerImagePath": "BasicMask",
       "lockPath": "Lock",
       "keybind": "1",
-      "uiColor": "#EBE8E2"
+      "uiColor": "#EBE8E2",
+      "unlockMessage": "You have unlocked the Basic Mask! This mask reveals base platforms."
     },
     {
       "maskName": "Trap",
@@ -20,7 +21,8 @@
       "playerImagePath": "TrapMask",
       "lockPath": "Lock",
       "keybind": "2",
-      "uiColor": "#FF3A3A"
+      "uiColor": "#FF3A3A",
+      "unlockMessage": "You have unlocked the Trap Mask! This mask reveals traps and allows you to slow down time briefly."
     },
     {
       "maskName": "Rope",
@@ -31,7 +33,8 @@
       "playerImagePath": "RopeMask",
       "lockPath": "Lock",
       "keybind": "3",
-      "uiColor": "#7C3AED"
+      "uiColor": "#7C3AED",
+      "unlockMessage": "You have unlocked the Rope Mask! This mask allows you to shoot ropes to nodes and swing across gaps."
     },
     {
       "maskName": "Phase",
@@ -42,7 +45,8 @@
       "playerImagePath": "PhaseMask",
       "lockPath": "Lock",
       "keybind": "4",
-      "uiColor": "#FACC15"
+      "uiColor": "#FACC15",
+      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special blocks for a short time."
     }
   ]
 }

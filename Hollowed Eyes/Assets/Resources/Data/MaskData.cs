@@ -10,4 +10,5 @@ public class MaskData
     public string lockPath;  // Path to lock overlay image in Resources
     public string keybind;
     public string uiColor;
+    public string unlockMessage;  // Message shown when mask is unlocked
 }
