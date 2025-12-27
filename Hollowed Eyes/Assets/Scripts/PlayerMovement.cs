@@ -49,8 +49,7 @@ public class PlayerMovement : MonoBehaviour
         
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
         
-        // Jump with new Input System
-        if ((Input.GetAxisRaw("Vertical") > 0) && isGrounded)
+        if ((Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
         }
