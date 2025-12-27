@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7000530165768044900}
   - component: {fileID: 7481406432724861990}
   - component: {fileID: -3345958093588916307}
+  - component: {fileID: 6462021379514323401}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -178,7 +179,6 @@ MonoBehaviour:
     m_Bits: 8
   groundCheck: {fileID: 0}
   groundCheckRadius: 0.52
-  mask: 1
 --- !u!114 &-3345958093588916307
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,3 +192,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMaskController
   activeMask: 0
+--- !u!114 &6462021379514323401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822191687436670633}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 54dafddc548e44c2bb6105df3fb8fd1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReactivateMovement
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.52

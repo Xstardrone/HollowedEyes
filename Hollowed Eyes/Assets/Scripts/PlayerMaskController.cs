@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
+using System;
+using Unity.VisualScripting;
+using UnityEngine.UI;
 
 public class PlayerMaskController : MonoBehaviour
 {
@@ -16,7 +19,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 2}, {2, 1}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 1}, {4, 0} } },
+        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 4}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 1} } },
         { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 2} } },
     };
@@ -30,6 +33,9 @@ public class PlayerMaskController : MonoBehaviour
     float timeSlowEndTime = 0f;
     float originalTimeScale = 1f;
     float originalFixedDeltaTime;
+
+    private GameObject swingNode;
+
 
     void Awake()
     {
@@ -82,6 +88,15 @@ public class PlayerMaskController : MonoBehaviour
             {
                 Debug.Log("E key pressed! Active mask: " + activeMask);
                 HandleAbility();
+            }
+            if (Keyboard.current.eKey.wasReleasedThisFrame)
+            {
+                if (activeMask == 3)
+                {
+                    swingNode.GetComponent<SpringJoint2D>().enabled = false;
+                    // gameObject.GetComponent<PlayerMovement>().enabled = true;
+                    GetComponent<ReactivateMovement>().enabled = true;
+                }
             }
         }
 
@@ -322,6 +337,47 @@ public class PlayerMaskController : MonoBehaviour
         {
             return;
         }
+        else if (FindNearestNode() == null)
+        {
+            return;
+        }
+        else if (UseOneMask(3))
+        {
+            swingNode = FindNearestNode();
+            swingNode.GetComponent<SpringJoint2D>().enabled = true;
+            gameObject.GetComponent<PlayerMovement>().enabled = false;
+        }
+    }
+
+    GameObject FindNearestNode()
+    {
+        GameObject[] nodes = GameObject.FindGameObjectsWithTag("Node");
+        GameObject nearestNode = null;
+        float minDist = Mathf.Infinity;
+        Vector2 playerPos = transform.position;
+        string facing = GetComponent<PlayerMovement>().GetFacing();
+        GameObject[] facingNodes = Array.FindAll(nodes, node =>
+        {
+            if (facing == "right" && node.transform.position.x >= playerPos.x)
+            {
+                return true;
+            }
+            else if (facing == "left" && node.transform.position.x <= playerPos.x)
+            {
+                return true;
+            }
+            return false;
+        });
+        foreach (GameObject node in facingNodes)
+        {
+            float dist = Vector2.Distance(playerPos, node.transform.position);
+            if (dist < minDist)
+            {
+                minDist = dist;
+                nearestNode = node;
+            }
+        }
+        return nearestNode;
     }
     
     void UsePhase()

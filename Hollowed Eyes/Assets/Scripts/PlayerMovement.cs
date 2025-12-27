@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool isGrounded;
     private float horizontalInput;
+    private string facing = "right";
 
     void Start()
     {
@@ -78,10 +79,14 @@ public class PlayerMovement : MonoBehaviour
         horizontalInput = 0f;
         if (Keyboard.current != null)
         {
-            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) {
                 horizontalInput = -1f;
-            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                facing = "left";
+            }
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) {
                 horizontalInput = 1f;
+                facing = "right";
+            }
         }
         
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
@@ -123,5 +128,10 @@ public class PlayerMovement : MonoBehaviour
     void enableRefillJumps()
     {
         refillJumps = true;
+    }
+
+    public string GetFacing()
+    {
+        return facing;
     }
 }
