@@ -19,9 +19,9 @@ public class PlayerMaskController : MonoBehaviour
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 2}, {2, 1}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 4}, {4, 0} } },
-        { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 1} } },
-        { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 2} } },
+        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 1}, {4, 0} } },
+        { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
+        { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
     };
 
     MaskDatabase database;
@@ -33,6 +33,14 @@ public class PlayerMaskController : MonoBehaviour
     float timeSlowEndTime = 0f;
     float originalTimeScale = 1f;
     float originalFixedDeltaTime;
+    
+    // Phase ability
+    bool isPhasing = false;
+    float phaseEndTime = 0f;
+    float phaseCooldown = 0f;
+    float maxPhaseCooldown = 5f;
+    int lastDisplayedCooldown = 0;
+    Collider2D playerCollider;
 
     private GameObject swingNode;
 
@@ -52,6 +60,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         LoadMasks();
         InitializeForLevel();
+        playerCollider = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -102,6 +111,8 @@ public class PlayerMaskController : MonoBehaviour
 
         CheckLevelChange();
         UpdateTimeSlow();
+        UpdatePhase();
+        UpdatePhaseCooldown();
     }
     
     void InitializeForLevel()
@@ -141,6 +152,11 @@ public class PlayerMaskController : MonoBehaviour
     
     public int GetUsesForMask(int maskNumber)
     {
+        // Phase mask (4) uses cooldown system instead of uses
+        if (maskNumber == 4)
+        {
+            return Mathf.CeilToInt(phaseCooldown);
+        }
         return maskUses.ContainsKey(maskNumber) ? maskUses[maskNumber] : 0;
     }
     
@@ -329,6 +345,11 @@ public class PlayerMaskController : MonoBehaviour
             Time.timeScale = 1f;
             Time.fixedDeltaTime = originalFixedDeltaTime;
         }
+        
+        if (isPhasing)
+        {
+            EndPhase();
+        }
     }
     
     void UseRope()
@@ -382,9 +403,76 @@ public class PlayerMaskController : MonoBehaviour
     
     void UsePhase()
     {
-        if (GetUsesForMask(4) <= 0)
+        if (isPhasing) return;
+        if (phaseCooldown > 0f) return;
+        
+        StartPhase();
+    }
+    
+    void StartPhase()
+    {
+        isPhasing = true;
+        phaseEndTime = Time.time + 1f;
+        
+        // Find all objects with "Phasable" tag and ignore collision
+        GameObject[] phasableObjects = GameObject.FindGameObjectsWithTag("Phasable");
+        foreach (GameObject obj in phasableObjects)
         {
-            return;
+            Collider2D objCollider = obj.GetComponent<Collider2D>();
+            if (objCollider != null && playerCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, objCollider, true);
+            }
+        }
+    }
+    
+    void UpdatePhase()
+    {
+        if (isPhasing && Time.time >= phaseEndTime)
+        {
+            EndPhase();
+        }
+    }
+    
+    void EndPhase()
+    {
+        isPhasing = false;
+        phaseCooldown = maxPhaseCooldown;
+        lastDisplayedCooldown = Mathf.CeilToInt(phaseCooldown);
+        
+        // Re-enable collision with all Phasable objects
+        GameObject[] phasableObjects = GameObject.FindGameObjectsWithTag("Phasable");
+        foreach (GameObject obj in phasableObjects)
+        {
+            Collider2D objCollider = obj.GetComponent<Collider2D>();
+            if (objCollider != null && playerCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, objCollider, false);
+            }
+        }
+        
+        RefreshAllMaskSlots();
+    }
+    
+    void UpdatePhaseCooldown()
+    {
+        if (phaseCooldown > 0f)
+        {
+            phaseCooldown -= Time.deltaTime;
+            
+            // Check if the displayed integer value has changed
+            int currentDisplayed = Mathf.CeilToInt(phaseCooldown);
+            if (currentDisplayed != lastDisplayedCooldown)
+            {
+                lastDisplayedCooldown = currentDisplayed;
+                RefreshAllMaskSlots();
+            }
+            
+            if (phaseCooldown <= 0f)
+            {
+                phaseCooldown = 0f;
+                RefreshAllMaskSlots();
+            }
         }
     }
 }

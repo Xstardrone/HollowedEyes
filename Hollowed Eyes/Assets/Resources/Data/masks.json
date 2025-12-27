@@ -16,7 +16,7 @@
       "maskName": "Trap",
       "maskNumber": 2,
       "unlockLevel": 2,
-      "description": "Reveals traps and allows time slowdown.",
+      "description": "Reveals traps and allows time slowdown by 3x.",
       "iconPath": "TrapMask",
       "playerImagePath": "TrapMask",
       "lockPath": "Lock",
@@ -40,13 +40,13 @@
       "maskName": "Phase",
       "maskNumber": 4,
       "unlockLevel": 4,
-      "description": "Phase through special blocks for a short time.",
+      "description": "Phase through special blocks for a 1s. 5s Cooldown.",
       "iconPath": "PhaseMask",
       "playerImagePath": "PhaseMask",
       "lockPath": "Lock",
       "keybind": "4",
       "uiColor": "#FACC15",
-      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special blocks for a short time."
+      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special blocks for a short time. It has infinite uses but a 5 second cooldown."
     }
   ]
 }
