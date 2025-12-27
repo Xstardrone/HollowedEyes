@@ -1,8 +1,12 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class TestExit : MonoBehaviour
 {
+    [SerializeField] private string sceneToLoad;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,7 +23,7 @@ public class TestExit : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            SceneManager.LoadScene("Level 2");
+            SceneManager.LoadScene(sceneToLoad);
         }
     }
 }
