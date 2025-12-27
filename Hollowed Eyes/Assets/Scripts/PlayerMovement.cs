@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -57,9 +56,10 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
         Debug.Log("Has Jumps: " + hasJumps);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        
+        // Refill jumps when landing
         if (isGrounded && refillJumps)
         {
             if (mask == 1)
@@ -72,12 +72,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         
-        // Get horizontal input using new Input System
-        horizontalInput = Input.GetAxisRaw("Horizontal");
+        // Get horizontal input - this should work now
+        horizontalInput = 0f;
+        if (Keyboard.current != null)
+        {
+            if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+                horizontalInput = -1f;
+            if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+                horizontalInput = 1f;
+        }
         
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
         
-        if ((Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && isGrounded)
+        // Jump - removed isGrounded check, only check hasJumps
+        if (Keyboard.current != null && (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && hasJumps > 0)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
             hasJumps--;
