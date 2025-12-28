@@ -22,7 +22,7 @@
       "lockPath": "Lock",
       "keybind": "2",
       "uiColor": "#FF3A3A",
-      "unlockMessage": "You have unlocked the Trap Mask! This mask reveals traps and allows you to slow down time briefly."
+      "unlockMessage": "You have unlocked the Trap Mask! This allows you to slow down time briefly. Different masks will also let you see different objects     ! Try switching masks!"
     },
     {
       "maskName": "Rope",

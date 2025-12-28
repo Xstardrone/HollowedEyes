@@ -280,4 +280,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerReset
   resetPosition: {x: 0, y: 0, z: 0}
+  resetSound: {fileID: 8300000, guid: 912065530fa6942058f1eca4c20c2a10, type: 3}
+  soundVolume: 0.4
   backgroundObject: {fileID: 0}
