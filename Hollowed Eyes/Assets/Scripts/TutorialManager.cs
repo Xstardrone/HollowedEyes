@@ -22,9 +22,15 @@ public class TutorialManager : MonoBehaviour
     
     private int currentMessageIndex = 0;
     private bool tutorialActive = true;
+    private int startLevel = -1;
 
     void Start()
     {
+        if (LevelGetter.Instance != null)
+        {
+            startLevel = LevelGetter.Instance.CurrentLevel;
+        }
+        
         if (tutorialMessagePanel != null)
         {
             tutorialMessagePanel.SetActive(true);
@@ -36,6 +42,15 @@ public class TutorialManager : MonoBehaviour
     void Update()
     {
         if (!tutorialActive) return;
+        
+        if (LevelGetter.Instance != null && startLevel != -1)
+        {
+            if (LevelGetter.Instance.CurrentLevel != startLevel)
+            {
+                EndTutorial();
+                return;
+            }
+        }
         
         // Check for SPACE key press
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -58,12 +73,10 @@ public class TutorialManager : MonoBehaviour
         
         if (currentMessageIndex >= tutorialMessages.Length)
         {
-            // Tutorial finished
             EndTutorial();
         }
         else
         {
-            // Show next message
             ShowCurrentMessage();
         }
     }

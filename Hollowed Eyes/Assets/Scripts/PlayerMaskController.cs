@@ -154,6 +154,19 @@ public class PlayerMaskController : MonoBehaviour
         RefreshAllMaskSlots();
     }
     
+    public void ResetAllUses()
+    {
+        if (LevelGetter.Instance == null) return;
+        
+        int currentLevel = LevelGetter.Instance.CurrentLevel;
+        LoadUsesForLevel(currentLevel);
+        
+        // Also reset Phase cooldown
+        phaseCooldown = 0f;
+        
+        RefreshAllMaskSlots();
+    }
+    
     public int GetUsesForMask(int maskNumber)
     {
         // Phase mask (4) uses cooldown system instead of uses

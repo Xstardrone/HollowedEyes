@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7481406432724861990}
   - component: {fileID: -3345958093588916307}
   - component: {fileID: 6462021379514323401}
+  - component: {fileID: -3476485086895410325}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -209,3 +210,16 @@ MonoBehaviour:
     m_Bits: 8
   groundCheck: {fileID: 0}
   groundCheckRadius: 0.52
+--- !u!114 &-3476485086895410325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822191687436670633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4b8da32b0fc3ba48ae2937dd9e5de70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerReset
+  resetPosition: {x: 0, y: 0, z: 0}
