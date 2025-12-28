@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Phasable
   - Node
+  - Mask 1
+  - Mask 2
+  - Mask 3
+  - Mask 4
   layers:
   - Default
   - TransparentFX

@@ -128,6 +128,7 @@ public class PlayerMaskController : MonoBehaviour
         
         int level = LevelGetter.Instance.CurrentLevel;
         activeMask = Mathf.Clamp(level, 1, 4);
+        showPlatforms();
         LoadUsesForLevel(level);
         lastKnownLevel = level;
     }
@@ -166,7 +167,8 @@ public class PlayerMaskController : MonoBehaviour
         
         RefreshAllMaskSlots();
     }
-    
+
+
     public int GetUsesForMask(int maskNumber)
     {
         // Phase mask (4) uses cooldown system instead of uses
@@ -250,6 +252,7 @@ public class PlayerMaskController : MonoBehaviour
         {
             lastKnownLevel = currentLevel;
             activeMask = Mathf.Clamp(currentLevel, 1, 4);
+            showPlatforms();
             LoadUsesForLevel(currentLevel);
         }
     }
@@ -298,6 +301,8 @@ public class PlayerMaskController : MonoBehaviour
         }
 
         activeMask = mask.maskNumber;
+        showPlatforms();
+
     }
 
     void HandleAbility()
@@ -490,6 +495,64 @@ public class PlayerMaskController : MonoBehaviour
             {
                 phaseCooldown = 0f;
                 RefreshAllMaskSlots();
+            }
+        }
+    }
+
+    void showPlatforms()
+    {
+        foreach (Transform platform in GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None))
+        {
+            if (platform.gameObject.GetComponent<SpriteRenderer>() == null || platform.gameObject.layer != LayerMask.NameToLayer("Ground"))
+            {
+                continue;
+            }
+            switch (activeMask) {
+                case 1:
+                    if ((platform.gameObject.tag == "Mask 1") || (platform.gameObject.tag == "Untagged"))
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
+                    } else
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
+                    }
+                    break;
+                case 2:
+                    if ((platform.gameObject.tag == "Mask 2") || (platform.gameObject.tag == "Untagged"))
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
+                    } else
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
+                    }
+                    break;
+                case 3:
+                    if ((platform.gameObject.tag == "Mask 3") || (platform.gameObject.tag == "Untagged"))
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
+                    } else
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
+                    }
+                    break;
+                case 4:
+                    if ((platform.gameObject.tag == "Mask 4") || (platform.gameObject.tag == "Untagged"))
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
+                    } else
+                    {
+                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
+                    }
+                    break;
+
             }
         }
     }
