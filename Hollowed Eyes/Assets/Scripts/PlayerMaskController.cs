@@ -129,7 +129,7 @@ public class PlayerMaskController : MonoBehaviour
         
         int level = LevelGetter.Instance.CurrentLevel;
         activeMask = Mathf.Clamp(level, 1, 4);
-        showPlatforms();
+        showObject();
         anim.SetInteger("activeMask", activeMask);
         LoadUsesForLevel(level);
         lastKnownLevel = level;
@@ -254,7 +254,7 @@ public class PlayerMaskController : MonoBehaviour
         {
             lastKnownLevel = currentLevel;
             activeMask = Mathf.Clamp(currentLevel, 1, 4);
-            showPlatforms();
+            showObject();
             anim.SetInteger("activeMask", activeMask);
             LoadUsesForLevel(currentLevel);
         }
@@ -304,7 +304,7 @@ public class PlayerMaskController : MonoBehaviour
         }
 
         activeMask = mask.maskNumber;
-        showPlatforms();
+        showObject();
         anim.SetInteger("activeMask", activeMask);
     }
 
@@ -502,60 +502,67 @@ public class PlayerMaskController : MonoBehaviour
         }
     }
 
-    void showPlatforms()
+    void showObject()
     {
         foreach (Transform platform in GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None))
         {
-            if (platform.gameObject.GetComponent<SpriteRenderer>() == null || platform.gameObject.layer != LayerMask.NameToLayer("Ground"))
+            SpriteRenderer spriteRenderer = platform.gameObject.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
             {
                 continue;
             }
-            switch (activeMask) {
-                case 1:
-                    if ((platform.gameObject.tag == "Mask 1") || (platform.gameObject.tag == "Untagged"))
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
-                    } else
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
-                    }
-                    break;
-                case 2:
-                    if ((platform.gameObject.tag == "Mask 2") || (platform.gameObject.tag == "Untagged"))
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
-                    } else
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
-                    }
-                    break;
-                case 3:
-                    if ((platform.gameObject.tag == "Mask 3") || (platform.gameObject.tag == "Untagged"))
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
-                    } else
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
-                    }
-                    break;
-                case 4:
-                    if ((platform.gameObject.tag == "Mask 4") || (platform.gameObject.tag == "Untagged"))
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = true;
-                    } else
-                    {
-                        platform.gameObject.GetComponent<SpriteRenderer>().enabled = false;
-                        platform.gameObject.GetComponent<Collider2D>().enabled = false;
-                    }
-                    break;
-
+            
+            string objTag = platform.gameObject.tag;
+            Collider2D objCollider = platform.gameObject.GetComponent<Collider2D>();
+            
+            // Special handling for Trap tag - always collidable, only visible with Mask 2
+            if (objTag == "Trap")
+            {
+                spriteRenderer.enabled = (activeMask == 2);
+                // Keep collider always enabled for traps
+                if (objCollider != null)
+                {
+                    objCollider.enabled = true;
+                }
+                continue;
+            }
+            
+            // Objects without mask-specific tags are always visible
+            bool isMaskSpecific = (objTag == "Mask 1" || objTag == "Mask 2" || objTag == "Mask 3" || objTag == "Mask 4");
+            
+            bool shouldBeVisible = false;
+            
+            if (!isMaskSpecific)
+            {
+                // Always show non-mask-specific objects
+                shouldBeVisible = true;
+            }
+            else
+            {
+                // Show mask-specific objects only when their mask is active
+                switch (activeMask)
+                {
+                    case 1:
+                        shouldBeVisible = (objTag == "Mask 1");
+                        break;
+                    case 2:
+                        shouldBeVisible = (objTag == "Mask 2");
+                        break;
+                    case 3:
+                        shouldBeVisible = (objTag == "Mask 3");
+                        break;
+                    case 4:
+                        shouldBeVisible = (objTag == "Mask 4");
+                        break;
+                }
+            }
+            
+            spriteRenderer.enabled = shouldBeVisible;
+            
+            // Only modify collider if it exists
+            if (objCollider != null)
+            {
+                objCollider.enabled = shouldBeVisible;
             }
         }
     }
