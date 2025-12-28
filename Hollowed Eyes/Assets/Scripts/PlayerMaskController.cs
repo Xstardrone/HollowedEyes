@@ -42,7 +42,8 @@ public class PlayerMaskController : MonoBehaviour
     int lastDisplayedCooldown = 0;
     Collider2D playerCollider;
 
-    private GameObject swingNode;
+    public GameObject swingNode;
+    private GameObject ropeRenderer;
 
 
     void Awake()
@@ -61,6 +62,7 @@ public class PlayerMaskController : MonoBehaviour
         LoadMasks();
         InitializeForLevel();
         playerCollider = GetComponent<Collider2D>();
+        ropeRenderer = GameObject.Find("RopeRenderer");
     }
 
     void Update()
@@ -105,6 +107,8 @@ public class PlayerMaskController : MonoBehaviour
                     swingNode.GetComponent<SpringJoint2D>().enabled = false;
                     // gameObject.GetComponent<PlayerMovement>().enabled = true;
                     GetComponent<ReactivateMovement>().enabled = true;
+                    ropeRenderer.GetComponent<RopeRendering>().enabled = false;
+
                 }
             }
         }
@@ -367,6 +371,7 @@ public class PlayerMaskController : MonoBehaviour
             swingNode = FindNearestNode();
             swingNode.GetComponent<SpringJoint2D>().enabled = true;
             gameObject.GetComponent<PlayerMovement>().enabled = false;
+            ropeRenderer.GetComponent<RopeRendering>().enabled = true;
         }
     }
 
