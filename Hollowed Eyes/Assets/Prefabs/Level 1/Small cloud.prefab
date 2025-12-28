@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8186923780937966110
+--- !u!1 &1997860742149219845
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,39 +8,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5570274791306605972}
-  - component: {fileID: 7131672517694215565}
-  - component: {fileID: 4486543729835109769}
-  m_Layer: 0
-  m_Name: Mask 1 Obj
-  m_TagString: Mask 1
+  - component: {fileID: 1140267978145642239}
+  - component: {fileID: 2264567057567606491}
+  - component: {fileID: 812768395800375125}
+  m_Layer: 3
+  m_Name: Small cloud
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5570274791306605972
+--- !u!4 &1140267978145642239
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186923780937966110}
+  m_GameObject: {fileID: 1997860742149219845}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.21, y: -2.03, z: 0}
-  m_LocalScale: {x: 1, y: 3.6004953, z: 1}
+  m_LocalPosition: {x: -5.4556, y: 2.3823, z: 0}
+  m_LocalScale: {x: 5.1284933, y: 4.2538548, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!212 &7131672517694215565
+--- !u!212 &2264567057567606491
 SpriteRenderer:
   serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186923780937966110}
+  m_GameObject: {fileID: 1997860742149219845}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -80,25 +80,25 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
+  m_Sprite: {fileID: -7879491318910019893, guid: 543a76fecc106224c8514b8bbaa2c75b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.55, y: 0.28}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!61 &4486543729835109769
-BoxCollider2D:
+--- !u!60 &812768395800375125
+PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186923780937966110}
+  m_GameObject: {fileID: 1997860742149219845}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -130,11 +130,33 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    oldSize: {x: 0.55, y: 0.28}
+    newSize: {x: 0.55, y: 0.28}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0.15976436, y: 0.12754837}
+      - {x: -0.19807623, y: 0.13112605}
+      - {x: -0.20862105, y: 0.13116086}
+      - {x: -0.24785699, y: 0.10717473}
+      - {x: -0.26794103, y: 0.102037765}
+      - {x: -0.26693255, y: -0.089606196}
+      - {x: -0.22749606, y: -0.086997226}
+      - {x: -0.19101296, y: -0.07010225}
+      - {x: -0.1537393, y: -0.06948643}
+      - {x: -0.07786468, y: -0.09169136}
+      - {x: -0.004382286, y: -0.11216776}
+      - {x: 0.029288124, y: -0.13639078}
+      - {x: 0.07388215, y: -0.13450181}
+      - {x: 0.14726198, y: -0.11213778}
+      - {x: 0.18090218, y: -0.09693844}
+      - {x: 0.21351412, y: -0.09961992}
+      - {x: 0.22602183, y: -0.107715644}
+      - {x: 0.2588655, y: -0.103527375}
+      - {x: 0.2699008, y: 0.067224205}
+      - {x: 0.26995802, y: 0.10325343}
+      - {x: 0.25693274, y: 0.11690074}
+  m_UseDelaunayMesh: 1

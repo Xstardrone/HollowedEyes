@@ -228,8 +228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43c1f33fb65b44e4baf11cd33d9b23ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  moveSpeed: 5
-  jumpForce: 10
+  moveSpeed: 5.5
+  jumpForce: 11.5
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -280,3 +280,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerReset
   resetPosition: {x: 0, y: 0, z: 0}
+  backgroundObject: {fileID: 0}
