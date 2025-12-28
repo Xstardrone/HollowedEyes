@@ -19,7 +19,7 @@ public class PlayerMaskController : MonoBehaviour
     public static Dictionary<int, Dictionary<int, int>> maskUsesPerLevel = new Dictionary<int, Dictionary<int, int>>
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
-        { 2, new Dictionary<int, int> { {1, 2}, {2, 1}, {3, 0}, {4, 0} } },
+        { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
         { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 1}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
         { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
@@ -130,7 +130,6 @@ public class PlayerMaskController : MonoBehaviour
         int level = LevelGetter.Instance.CurrentLevel;
         activeMask = Mathf.Clamp(level, 1, 4);
         showObject();
-        anim.SetInteger("activeMask", activeMask);
         LoadUsesForLevel(level);
         lastKnownLevel = level;
     }
@@ -305,7 +304,6 @@ public class PlayerMaskController : MonoBehaviour
 
         activeMask = mask.maskNumber;
         showObject();
-        anim.SetInteger("activeMask", activeMask);
     }
 
     void HandleAbility()

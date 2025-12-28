@@ -9,13 +9,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.5f;
 
-    private int baseJumps = 1;
-    private int hasJumps;
-    private int bonusJumpsUsedThisAir = 0;  // Track bonus jumps used this airtime
-    private bool refillJumps;
+    private bool hasUsedGroundJump = false;
     
     private Rigidbody2D rb;
     private bool isGrounded;
+    private bool wasGrounded = false;
     private float horizontalInput;
     private string facing = "right";
 
@@ -44,36 +42,19 @@ public class PlayerMovement : MonoBehaviour
             BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
             collider.size = new Vector2(1f, 1f);
         }
-
-        RefillJumpsToMax();
-        refillJumps = true;
-    }
-    
-    int GetMaxJumps()
-    {
-        int bonus = 0;
-        if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.CanUseBonusJump())
-        {
-            bonus = 1;
-        }
-        return baseJumps + bonus;
-    }
-    
-    void RefillJumpsToMax()
-    {
-        hasJumps = GetMaxJumps();
-        bonusJumpsUsedThisAir = 0;
     }
 
     void Update()
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         
-        // Refill jumps when landing
-        if (isGrounded && refillJumps)
+        // Reset ground jump when landing
+        if (isGrounded && !wasGrounded)
         {
-            RefillJumpsToMax();
+            hasUsedGroundJump = false;
         }
+        
+        wasGrounded = isGrounded;
         
         // Get horizontal input
         horizontalInput = 0f;
@@ -92,27 +73,24 @@ public class PlayerMovement : MonoBehaviour
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
         
         // Jump
-        if (Keyboard.current != null && (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame) && hasJumps > 0)
+        if (Keyboard.current != null && (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame))
         {
-            // Check if this is a bonus jump (using more than base jumps)
-            int jumpsUsed = (GetMaxJumps() - hasJumps);
-            bool isBonusJump = jumpsUsed >= baseJumps;
-            
-            if (isBonusJump && PlayerMaskController.Instance != null)
+            if (isGrounded && !hasUsedGroundJump)
             {
-                // Consume a mask use for the bonus jump
-                if (!PlayerMaskController.Instance.UseBonusJump())
-                {
-                    // No uses left, can't do bonus jump
-                    return;
-                }
-                bonusJumpsUsedThisAir++;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                hasUsedGroundJump = true;
             }
-            
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
-            hasJumps--;
-            refillJumps = false;
-            Invoke("enableRefillJumps", 0.1f);
+            else
+            {
+                if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.CanUseBonusJump())
+                {
+                    // Consume a mask use
+                    if (PlayerMaskController.Instance.UseBonusJump())
+                    {
+                        rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                    }
+                }
+            }
         }
     }
 
@@ -123,11 +101,6 @@ public class PlayerMovement : MonoBehaviour
             Gizmos.color = Color.red;
             Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
         }
-    }
-
-    void enableRefillJumps()
-    {
-        refillJumps = true;
     }
 
     public string GetFacing()
