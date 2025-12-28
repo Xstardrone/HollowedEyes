@@ -46,7 +46,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -122,89 +122,89 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: idleAnimMask (7)_0
+      name: Unmasked - Idle_0
       rect:
         serializedVersion: 2
-        x: 98
-        y: 1077
-        width: 156
-        height: 310
+        x: 0
+        y: 1056
+        width: 352
+        height: 352
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 06b2daddde32d6060800000000000000
-      internalID: 6948249304635878240
+      spriteID: 31bf2bd8e21e947728f87dddef05660d
+      internalID: -708878939
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idleAnimMask (7)_1
+      name: Unmasked - Idle_1
       rect:
         serializedVersion: 2
-        x: 98
-        y: 725
-        width: 156
-        height: 310
+        x: 0
+        y: 704
+        width: 352
+        height: 352
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 5a944dca0d9206540800000000000000
-      internalID: 4999041562610780581
+      spriteID: 4943cc9f49e264cf2a525b29891dea98
+      internalID: -1857962158
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idleAnimMask (7)_2
+      name: Unmasked - Idle_2
       rect:
         serializedVersion: 2
-        x: 98
-        y: 373
-        width: 156
-        height: 299
+        x: 0
+        y: 352
+        width: 352
+        height: 352
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f400c11536225c080800000000000000
-      internalID: -9167883656484880305
+      spriteID: d5235a647ac10410fae97d84c62a0fb0
+      internalID: 200875385
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: idleAnimMask (7)_3
+      name: Unmasked - Idle_3
       rect:
         serializedVersion: 2
-        x: 98
-        y: 21
-        width: 156
-        height: 310
+        x: 0
+        y: 0
+        width: 352
+        height: 352
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a3f252cc6f8b80010800000000000000
-      internalID: 1155376674546986810
+      spriteID: 009938d9da8bd46c59c366f5762d2898
+      internalID: 2026997835
       vertices: []
       indices: 
       edges: []
@@ -213,7 +213,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 54575697b786b4a89b190ff8830c4c39
     internalID: 0
     vertices: []
     indices: 
@@ -221,12 +221,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":352.0,"y":352.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      idleAnimMask (7)_0: 6948249304635878240
-      idleAnimMask (7)_1: 4999041562610780581
-      idleAnimMask (7)_2: -9167883656484880305
-      idleAnimMask (7)_3: 1155376674546986810
+      Unmasked - Idle_0: -708878939
+      Unmasked - Idle_1: -1857962158
+      Unmasked - Idle_2: 200875385
+      Unmasked - Idle_3: 2026997835
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

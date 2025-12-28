@@ -10,6 +10,7 @@ public class PlayerMaskController : MonoBehaviour
     public static PlayerMaskController Instance;
     
     public int activeMask = 1;
+    [SerializeField] public Animator anim;
     
     // Mask uses remaining for current level
     public Dictionary<int, int> maskUses = new Dictionary<int, int>();
@@ -129,6 +130,7 @@ public class PlayerMaskController : MonoBehaviour
         int level = LevelGetter.Instance.CurrentLevel;
         activeMask = Mathf.Clamp(level, 1, 4);
         showPlatforms();
+        anim.SetInteger("activeMask", activeMask);
         LoadUsesForLevel(level);
         lastKnownLevel = level;
     }
@@ -253,6 +255,7 @@ public class PlayerMaskController : MonoBehaviour
             lastKnownLevel = currentLevel;
             activeMask = Mathf.Clamp(currentLevel, 1, 4);
             showPlatforms();
+            anim.SetInteger("activeMask", activeMask);
             LoadUsesForLevel(currentLevel);
         }
     }
@@ -302,7 +305,7 @@ public class PlayerMaskController : MonoBehaviour
 
         activeMask = mask.maskNumber;
         showPlatforms();
-
+        anim.SetInteger("activeMask", activeMask);
     }
 
     void HandleAbility()

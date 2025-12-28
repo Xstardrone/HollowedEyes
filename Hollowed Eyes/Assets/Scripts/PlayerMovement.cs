@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
         {
             GameObject checkObj = new GameObject("GroundCheck");
             checkObj.transform.parent = transform;
-            checkObj.transform.localPosition = new Vector3(0, -0.5f, 0);
+            checkObj.transform.localPosition = new Vector3(0, -1.4f, 0);
             groundCheck = checkObj.transform;
         }
         
