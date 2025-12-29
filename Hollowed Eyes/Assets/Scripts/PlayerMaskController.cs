@@ -20,7 +20,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 200}, {2, 200}, {3, 100}, {4, 0} } },
+        { 3, new Dictionary<int, int> { {1, 4}, {2, 1}, {3, 7}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
         { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
     };
@@ -36,7 +36,7 @@ public class PlayerMaskController : MonoBehaviour
     float originalFixedDeltaTime;
     
     // Phase ability
-    bool isPhasing = false;
+    public bool isPhasing = false;
     float phaseEndTime = 0f;
     float phaseCooldown = 0f;
     float maxPhaseCooldown = 5f;
@@ -420,18 +420,27 @@ public class PlayerMaskController : MonoBehaviour
     
     void UseRope()
     {
-        if (GetUsesForMask(3) <= 0)
+        int uses = GetUsesForMask(3);
+        if (uses <= 0)
         {
+            Debug.Log($"Rope failed: No uses left (uses={uses})");
             return;
         }
-        else if (FindNearestNode() == null)
+        
+        GameObject nearestNode = FindNearestNode();
+        if (nearestNode == null)
         {
+            Debug.Log("Rope failed: No node found in range");
             return;
         }
-        else if (UseOneMask(3))
+        
+        Debug.Log($"Attempting rope to node: {nearestNode.name} at distance {Vector2.Distance(transform.position, nearestNode.transform.position)}");
+        
+        if (UseOneMask(3))
         {
-            swingNode = FindNearestNode();
+            swingNode = nearestNode;
             SpringJoint2D spring = swingNode.GetComponent<SpringJoint2D>();
+            Debug.Log($"Rope activated! Uses remaining: {GetUsesForMask(3)}");
             
             // Configure spring joint for better swing physics
             float distance = Vector2.Distance(transform.position, swingNode.transform.position);
@@ -452,9 +461,9 @@ public class PlayerMaskController : MonoBehaviour
     {
         if (!isRopeActive) return;
         
-        // Store current velocity before cutting, but reduce it
+        // Store current velocity before cutting and boost it
         Rigidbody2D rb = GetComponent<Rigidbody2D>();
-        Vector2 currentVelocity = rb.linearVelocity * 0.7f; // 30% less momentum
+        Vector2 currentVelocity = rb.linearVelocity * 1.2f; // 20% more momentum
         
         // Disable rope
         if (swingNode != null)
@@ -469,6 +478,13 @@ public class PlayerMaskController : MonoBehaviour
         
         isRopeActive = false;
         anim.SetBool("Rope", false);
+        
+        // Reset air jump ONLY after cutting rope (not on normal mask switches)
+        PlayerMovement playerMovement = GetComponent<PlayerMovement>();
+        if (playerMovement != null)
+        {
+            playerMovement.ResetAirJump();
+        }
     }
 
     GameObject FindNearestNode()
@@ -525,6 +541,17 @@ public class PlayerMaskController : MonoBehaviour
                 Physics2D.IgnoreCollision(playerCollider, objCollider, true);
             }
         }
+        
+        // Also ignore collision with PhaseTrap objects during phase
+        GameObject[] phaseTrapObjects = GameObject.FindGameObjectsWithTag("PhaseTrap");
+        foreach (GameObject obj in phaseTrapObjects)
+        {
+            Collider2D objCollider = obj.GetComponent<Collider2D>();
+            if (objCollider != null && playerCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, objCollider, true);
+            }
+        }
     }
     
     void UpdatePhase()
@@ -544,6 +571,17 @@ public class PlayerMaskController : MonoBehaviour
         // Re-enable collision with all Phasable objects
         GameObject[] phasableObjects = GameObject.FindGameObjectsWithTag("Phasable");
         foreach (GameObject obj in phasableObjects)
+        {
+            Collider2D objCollider = obj.GetComponent<Collider2D>();
+            if (objCollider != null && playerCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, objCollider, false);
+            }
+        }
+        
+        // Re-enable collision with PhaseTrap objects
+        GameObject[] phaseTrapObjects = GameObject.FindGameObjectsWithTag("PhaseTrap");
+        foreach (GameObject obj in phaseTrapObjects)
         {
             Collider2D objCollider = obj.GetComponent<Collider2D>();
             if (objCollider != null && playerCollider != null)
@@ -604,6 +642,23 @@ public class PlayerMaskController : MonoBehaviour
             {
                 spriteRenderer.enabled = (activeMask == 2);
                 // Keep collider always enabled for traps
+                if (objCollider != null)
+                {
+                    objCollider.enabled = true;
+                }
+                continue;
+            }
+            
+            // Special handling for PhaseTrap tag - visible with Trap (2) or Phase (4) mask
+            if (objTag == "PhaseTrap")
+            {
+                spriteRenderer.enabled = (activeMask == 2 || activeMask == 4);
+                // Disable child sprite renderers too
+                foreach (SpriteRenderer childRenderer in platform.gameObject.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    childRenderer.enabled = (activeMask == 2 || activeMask == 4);
+                }
+                // Keep collider always enabled (will be ignored during phase mode)
                 if (objCollider != null)
                 {
                     objCollider.enabled = true;
