@@ -23,6 +23,11 @@ public class MaskBarUI : MonoBehaviour
         CreateMaskSlots();
     }
 
+    void OnEnable()
+    {
+        GameObject.Find("Player").GetComponent<PlayerMaskController>().RefreshAllMaskSlots();
+    }
+
     void LoadMasks()
     {
         TextAsset json = Resources.Load<TextAsset>("Data/masks");

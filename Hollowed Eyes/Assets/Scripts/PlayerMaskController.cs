@@ -261,7 +261,7 @@ public class PlayerMaskController : MonoBehaviour
         }
     }
     
-    void RefreshAllMaskSlots()
+    public void RefreshAllMaskSlots()
     {
         MaskSlotUI[] slots = FindObjectsOfType<MaskSlotUI>();
         foreach (var slot in slots)
