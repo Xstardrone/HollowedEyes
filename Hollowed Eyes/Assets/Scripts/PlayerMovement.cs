@@ -132,4 +132,27 @@ public class PlayerMovement : MonoBehaviour
     {
         return facing;
     }
+    
+    // Allow setting facing direction (for teleports)
+    public void SetFacing(string newFacing)
+    {
+        facing = newFacing;
+        if (spriteHolder != null)
+        {
+            if (newFacing == "left")
+            {
+                spriteHolder.transform.localScale = new Vector3(-1, 1, 1);
+            }
+            else if (newFacing == "right")
+            {
+                spriteHolder.transform.localScale = new Vector3(1, 1, 1);
+            }
+        }
+    }
+    
+    // Allow resetting air jump when switching to mask 1 after rope
+    public void ResetAirJump()
+    {
+        hasUsedAirJump = false;
+    }
 }

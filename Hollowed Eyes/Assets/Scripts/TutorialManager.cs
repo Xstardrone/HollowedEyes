@@ -15,6 +15,7 @@ public class TutorialManager : MonoBehaviour
         "For example, the first mask you start with, allows for double jump.",
         "Click 'E' to use the other mask's special ability.",
         "Click 'R' to reset your position to the start of the current level.",
+        "Click 'Q' to disable the mask hotbar",
         "Use WAD (or arrow keys) to jump and move left/right. ",
         "Press 1, 2, 3, or 4 to switch between masks.",
         "Each mask has limited uses per level, as you can see in the bottom right of each mask slot.",
