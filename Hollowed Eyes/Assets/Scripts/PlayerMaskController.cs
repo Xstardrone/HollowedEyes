@@ -22,7 +22,7 @@ public class PlayerMaskController : MonoBehaviour
         { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
         { 3, new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
-        { 5, new Dictionary<int, int> { {1, 300}, {2, 200}, {3, 200}, {4, 5} } },
+        { 5, new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
     };
 
     MaskDatabase database;
@@ -324,25 +324,21 @@ public class PlayerMaskController : MonoBehaviour
             maskSwap.material.SetColor("_ToBlue", new Color32(0xbd, 0xb1, 0xb1, 0xff));
         } else if (activeMask == 1)
         {
-            Debug.Log("Venetian");
             maskSwap.material.SetColor("_ToRed", new Color32(0xff, 0xff, 0xff, 0xff));
             maskSwap.material.SetColor("_ToGreen", new Color32(0xd0, 0xd0, 0xd0, 0xff));
             maskSwap.material.SetColor("_ToBlue", new Color32(0xff, 0xff, 0xff, 0xff));
         } else if (activeMask == 2)
         {
-            Debug.Log("Oni");
             maskSwap.material.SetColor("_ToRed", new Color32(0xba, 0x1b, 0x1b, 0xff));
             maskSwap.material.SetColor("_ToGreen", new Color32(0x80, 0x12, 0x12, 0xff));
             maskSwap.material.SetColor("_ToBlue", new Color32(0xba, 0x1b, 0x1b, 0xff));
         } else if (activeMask == 3)
         {
-            Debug.Log("Rope");
             maskSwap.material.SetColor("_ToRed", new Color32(0xae, 0x85, 0x52, 0xff));
             maskSwap.material.SetColor("_ToGreen", new Color32(0x90, 0x6d, 0x43, 0xff));
             maskSwap.material.SetColor("_ToBlue", new Color32(0xae, 0x85, 0x52, 0xff));
         } else if (activeMask == 4)
         {
-            Debug.Log("tron");
             maskSwap.material.SetColor("_ToRed", new Color32(0xff, 0x9d, 0x00, 0xff));
             maskSwap.material.SetColor("_ToGreen", new Color32(0x00, 0x00, 0x00, 0xff));
             maskSwap.material.SetColor("_ToBlue", new Color32(0x16, 0x16, 0x16, 0xff));
@@ -423,24 +419,20 @@ public class PlayerMaskController : MonoBehaviour
         int uses = GetUsesForMask(3);
         if (uses <= 0)
         {
-            Debug.Log($"Rope failed: No uses left (uses={uses})");
             return;
         }
         
         GameObject nearestNode = FindNearestNode();
         if (nearestNode == null)
         {
-            Debug.Log("Rope failed: No node found in range");
             return;
         }
         
-        Debug.Log($"Attempting rope to node: {nearestNode.name} at distance {Vector2.Distance(transform.position, nearestNode.transform.position)}");
         
         if (UseOneMask(3))
         {
             swingNode = nearestNode;
             SpringJoint2D spring = swingNode.GetComponent<SpringJoint2D>();
-            Debug.Log($"Rope activated! Uses remaining: {GetUsesForMask(3)}");
             
             // Configure spring joint for better swing physics
             float distance = Vector2.Distance(transform.position, swingNode.transform.position);
@@ -747,17 +739,14 @@ public class PlayerMaskController : MonoBehaviour
                 
                 if (!shouldBeVisible)
                 {
-                    // Debug.Log($"Ignoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
                     disabledCount++;
                 }
                 else
                 {
-                    // Debug.Log($"Restoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
                     enabledCount++;
                 }
             }
         }
         
-        Debug.Log($"ShowObject complete - Active Mask: {activeMask}, Disabled: {disabledCount}, Enabled: {enabledCount}");
     }
 }
