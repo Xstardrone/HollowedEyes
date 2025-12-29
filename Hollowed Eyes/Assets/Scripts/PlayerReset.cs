@@ -6,6 +6,10 @@ public class PlayerReset : MonoBehaviour
     [Header("Reset Position")]
     [SerializeField] private Vector3 resetPosition = new Vector3(0, 0, 0);
     
+    [Header("Reset Sound")]
+    [SerializeField] private AudioClip resetSound;
+    [SerializeField] private float soundVolume = 1f;
+    
     [Header("Boundary Detection")]
     [SerializeField] private GameObject backgroundObject;
     
@@ -13,10 +17,19 @@ public class PlayerReset : MonoBehaviour
     private bool hasBounds = false;
     private float lastResetTime = -999f;
     private float resetCooldown = 0.5f;
+    private AudioSource audioSource;
     
     void Start()
     {
         CalculateBackgroundBounds();
+        
+        // Get or create AudioSource component
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+        {
+            audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        audioSource.playOnAwake = false;
     }
     
     void CalculateBackgroundBounds()
@@ -89,6 +102,12 @@ public class PlayerReset : MonoBehaviour
         if (PlayerMaskController.Instance != null)
         {
             PlayerMaskController.Instance.ResetAllUses();
+        }
+        
+        // Play reset sound
+        if (resetSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(resetSound, soundVolume);
         }
         
         Debug.Log("Player reset to position: " + resetPosition);
