@@ -53,7 +53,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
 
-        Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         anim.SetBool("onGround", isGrounded);
 

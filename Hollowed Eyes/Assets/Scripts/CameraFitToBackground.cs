@@ -27,7 +27,7 @@ public class CameraFitToBackground : MonoBehaviour
         // Ensure camera culling mask is correct
         cam.cullingMask = -1; // Render everything
         
-        Debug.Log($"Camera Awake - BG: {background?.name}, ClearFlags: {cam.clearFlags}, BGColor: {cam.backgroundColor}");
+        // Debug.Log($"Camera Awake - BG: {background?.name}, ClearFlags: {cam.clearFlags}, BGColor: {cam.backgroundColor}");
     }
     
     // Use OnGUI to draw black bars - this is the most reliable method
@@ -62,7 +62,7 @@ public class CameraFitToBackground : MonoBehaviour
             
             if (!debugLogged)
             {
-                Debug.Log($"OnGUI Pillarbox - LeftBar: {barWidth}, RightBarStart: {rightBarStart}, RightBarWidth: {rightBarWidth}");
+                // Debug.Log($"OnGUI Pillarbox - LeftBar: {barWidth}, RightBarStart: {rightBarStart}, RightBarWidth: {rightBarWidth}");
             }
         }
         // If letterbox (horizontal bars on top/bottom)
@@ -86,7 +86,7 @@ public class CameraFitToBackground : MonoBehaviour
             
             if (!debugLogged)
             {
-                Debug.Log($"OnGUI Letterbox - TopBarHeight: {barHeight}, BottomBarY: {bottomBarY}");
+                // Debug.Log($"OnGUI Letterbox - TopBarHeight: {barHeight}, BottomBarY: {bottomBarY}");
             }
         }
         
@@ -126,7 +126,7 @@ public class CameraFitToBackground : MonoBehaviour
     {
         if (background == null)
         {
-            Debug.LogWarning("Background is null in FitCamera!");
+            // Debug.LogWarning("Background is null in FitCamera!");
             return;
         }
         
@@ -144,7 +144,7 @@ public class CameraFitToBackground : MonoBehaviour
             rect.x = 0;
             rect.y = (1.0f - scaleHeight) / 2.0f;
             cam.rect = rect;
-            Debug.Log($"Letterbox mode - Rect: {rect}, WindowAspect: {windowAspect}, TargetAspect: {targetAspect}");
+            // Debug.Log($"Letterbox mode - Rect: {rect}, WindowAspect: {windowAspect}, TargetAspect: {targetAspect}");
         }
         else
         {
@@ -155,7 +155,7 @@ public class CameraFitToBackground : MonoBehaviour
             rect.x = (1.0f - scaleWidth) / 2.0f;
             rect.y = 0;
             cam.rect = rect;
-            Debug.Log($"Pillarbox mode - Rect: {rect}, WindowAspect: {windowAspect}, TargetAspect: {targetAspect}");
+            // Debug.Log($"Pillarbox mode - Rect: {rect}, WindowAspect: {windowAspect}, TargetAspect: {targetAspect}");
         }
         
         transform.position = new Vector3(

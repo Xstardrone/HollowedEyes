@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 using System;
-using Unity.VisualScripting;
 using UnityEngine.UI;
 
 public class PlayerMaskController : MonoBehaviour
@@ -11,7 +10,8 @@ public class PlayerMaskController : MonoBehaviour
     
     public int activeMask = 1;
     [SerializeField] public Animator anim;
-    
+    [SerializeField] public Renderer maskSwap;
+
     // Mask uses remaining for current level
     public Dictionary<int, int> maskUses = new Dictionary<int, int>();
     
@@ -129,6 +129,7 @@ public class PlayerMaskController : MonoBehaviour
         
         int level = LevelGetter.Instance.CurrentLevel;
         activeMask = Mathf.Clamp(level, 1, 4);
+        setMaskColor();
         showObject();
         LoadUsesForLevel(level);
         lastKnownLevel = level;
@@ -253,6 +254,7 @@ public class PlayerMaskController : MonoBehaviour
         {
             lastKnownLevel = currentLevel;
             activeMask = Mathf.Clamp(currentLevel, 1, 4);
+            setMaskColor();
             showObject();
             anim.SetInteger("activeMask", activeMask);
             LoadUsesForLevel(currentLevel);
@@ -309,7 +311,42 @@ public class PlayerMaskController : MonoBehaviour
         }
 
         activeMask = mask.maskNumber;
+        setMaskColor();
         showObject();
+    }
+
+    void setMaskColor()
+    {
+        if (activeMask == 0)
+        {
+            maskSwap.material.SetColor("_ToRed", new Color32(0xbd, 0xb1, 0xb1, 0xff));
+            maskSwap.material.SetColor("_ToGreen", new Color32(0xbd, 0xb1, 0xb1, 0xff));
+            maskSwap.material.SetColor("_ToBlue", new Color32(0xbd, 0xb1, 0xb1, 0xff));
+        } else if (activeMask == 1)
+        {
+            Debug.Log("Venetian");
+            maskSwap.material.SetColor("_ToRed", new Color32(0xff, 0xff, 0xff, 0xff));
+            maskSwap.material.SetColor("_ToGreen", new Color32(0xd0, 0xd0, 0xd0, 0xff));
+            maskSwap.material.SetColor("_ToBlue", new Color32(0xff, 0xff, 0xff, 0xff));
+        } else if (activeMask == 2)
+        {
+            Debug.Log("Oni");
+            maskSwap.material.SetColor("_ToRed", new Color32(0xba, 0x1b, 0x1b, 0xff));
+            maskSwap.material.SetColor("_ToGreen", new Color32(0x80, 0x12, 0x12, 0xff));
+            maskSwap.material.SetColor("_ToBlue", new Color32(0xba, 0x1b, 0x1b, 0xff));
+        } else if (activeMask == 3)
+        {
+            Debug.Log("Rope");
+            maskSwap.material.SetColor("_ToRed", new Color32(0xae, 0x85, 0x52, 0xff));
+            maskSwap.material.SetColor("_ToGreen", new Color32(0x90, 0x6d, 0x43, 0xff));
+            maskSwap.material.SetColor("_ToBlue", new Color32(0xae, 0x85, 0x52, 0xff));
+        } else if (activeMask == 4)
+        {
+            Debug.Log("tron");
+            maskSwap.material.SetColor("_ToRed", new Color32(0xff, 0x9d, 0x00, 0xff));
+            maskSwap.material.SetColor("_ToGreen", new Color32(0x00, 0x00, 0x00, 0xff));
+            maskSwap.material.SetColor("_ToBlue", new Color32(0x16, 0x16, 0x16, 0xff));
+        }
     }
 
     void HandleAbility()
@@ -407,6 +444,7 @@ public class PlayerMaskController : MonoBehaviour
             gameObject.GetComponent<PlayerMovement>().enabled = false;
             ropeRenderer.GetComponent<RopeRendering>().enabled = true;
             isRopeActive = true;
+            anim.SetBool("Rope", true);
         }
     }
     
@@ -430,6 +468,7 @@ public class PlayerMaskController : MonoBehaviour
         rb.linearVelocity = currentVelocity;
         
         isRopeActive = false;
+        anim.SetBool("Rope", false);
     }
 
     GameObject FindNearestNode()
@@ -633,12 +672,12 @@ public class PlayerMaskController : MonoBehaviour
                 
                 if (!shouldBeVisible)
                 {
-                    Debug.Log($"Ignoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
+                    // Debug.Log($"Ignoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
                     disabledCount++;
                 }
                 else
                 {
-                    Debug.Log($"Restoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
+                    // Debug.Log($"Restoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
                     enabledCount++;
                 }
             }

@@ -251,6 +251,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMaskController
   activeMask: 0
   anim: {fileID: 1666394138686379073}
+  maskSwap: {fileID: 96729267658190365}
   swingNode: {fileID: 0}
   maxRopeDistance: 12
 --- !u!114 &6462021379514323401
