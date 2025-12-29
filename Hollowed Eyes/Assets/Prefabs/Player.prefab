@@ -129,6 +129,7 @@ GameObject:
   - component: {fileID: -3345958093588916307}
   - component: {fileID: 6462021379514323401}
   - component: {fileID: -3476485086895410325}
+  - component: {fileID: 3183956006702250528}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -251,6 +252,7 @@ MonoBehaviour:
   activeMask: 0
   anim: {fileID: 1666394138686379073}
   swingNode: {fileID: 0}
+  maxRopeDistance: 12
 --- !u!114 &6462021379514323401
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -284,3 +286,21 @@ MonoBehaviour:
   resetSound: {fileID: 8300000, guid: 912065530fa6942058f1eca4c20c2a10, type: 3}
   soundVolume: 0.4
   backgroundObject: {fileID: 0}
+--- !u!114 &3183956006702250528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7822191687436670633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0355d95789a4eee4c99a5212effa6610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  wallCheckDistance: 0.6
+  groundCheck: {fileID: 0}
+  groundCheckRadius: 0.52
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8

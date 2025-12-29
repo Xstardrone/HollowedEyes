@@ -20,7 +20,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 1}, {4, 0} } },
+        { 3, new Dictionary<int, int> { {1, 200}, {2, 200}, {3, 100}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
         { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
     };
@@ -45,6 +45,10 @@ public class PlayerMaskController : MonoBehaviour
 
     public GameObject swingNode;
     private GameObject ropeRenderer;
+    private bool isRopeActive = false;
+    
+    [Header("Rope Settings")]
+    [SerializeField] private float maxRopeDistance = 15f;
 
 
     void Awake()
@@ -103,13 +107,9 @@ public class PlayerMaskController : MonoBehaviour
             }
             if (Keyboard.current.eKey.wasReleasedThisFrame)
             {
-                if (activeMask == 3)
+                if (activeMask == 3 && isRopeActive)
                 {
-                    swingNode.GetComponent<SpringJoint2D>().enabled = false;
-                    // gameObject.GetComponent<PlayerMovement>().enabled = true;
-                    GetComponent<ReactivateMovement>().enabled = true;
-                    ropeRenderer.GetComponent<RopeRendering>().enabled = false;
-
+                    CutRope();
                 }
             }
         }
@@ -301,6 +301,12 @@ public class PlayerMaskController : MonoBehaviour
         {
             return;
         }
+        
+        // Cut rope if active when switching masks
+        if (isRopeActive && activeMask == 3)
+        {
+            CutRope();
+        }
 
         activeMask = mask.maskNumber;
         showObject();
@@ -388,10 +394,42 @@ public class PlayerMaskController : MonoBehaviour
         else if (UseOneMask(3))
         {
             swingNode = FindNearestNode();
-            swingNode.GetComponent<SpringJoint2D>().enabled = true;
+            SpringJoint2D spring = swingNode.GetComponent<SpringJoint2D>();
+            
+            // Configure spring joint for better swing physics
+            float distance = Vector2.Distance(transform.position, swingNode.transform.position);
+            spring.distance = distance; // Lock to activation radius
+            spring.dampingRatio = 0.7f; // Reduce momentum (higher = less bouncy)
+            spring.frequency = 1f; // Make rope stiffer (lower = more slack)
+            spring.autoConfigureDistance = false; // Don't pull inward
+            
+            spring.enabled = true;
             gameObject.GetComponent<PlayerMovement>().enabled = false;
             ropeRenderer.GetComponent<RopeRendering>().enabled = true;
+            isRopeActive = true;
         }
+    }
+    
+    void CutRope()
+    {
+        if (!isRopeActive) return;
+        
+        // Store current velocity before cutting, but reduce it
+        Rigidbody2D rb = GetComponent<Rigidbody2D>();
+        Vector2 currentVelocity = rb.linearVelocity * 0.7f; // 30% less momentum
+        
+        // Disable rope
+        if (swingNode != null)
+        {
+            swingNode.GetComponent<SpringJoint2D>().enabled = false;
+        }
+        GetComponent<ReactivateMovement>().enabled = true;
+        ropeRenderer.GetComponent<RopeRendering>().enabled = false;
+        
+        // Apply reduced velocity
+        rb.linearVelocity = currentVelocity;
+        
+        isRopeActive = false;
     }
 
     GameObject FindNearestNode()
@@ -416,7 +454,7 @@ public class PlayerMaskController : MonoBehaviour
         foreach (GameObject node in facingNodes)
         {
             float dist = Vector2.Distance(playerPos, node.transform.position);
-            if (dist < minDist)
+            if (dist < minDist && dist <= maxRopeDistance)
             {
                 minDist = dist;
                 nearestNode = node;
@@ -502,6 +540,12 @@ public class PlayerMaskController : MonoBehaviour
 
     void showObject()
     {
+        int disabledCount = 0;
+        int enabledCount = 0;
+        
+        // Get all colliders to handle child colliders too
+        Dictionary<GameObject, bool> processedRoots = new Dictionary<GameObject, bool>();
+        
         foreach (Transform platform in GameObject.FindObjectsByType<Transform>(FindObjectsSortMode.None))
         {
             SpriteRenderer spriteRenderer = platform.gameObject.GetComponent<SpriteRenderer>();
@@ -511,6 +555,9 @@ public class PlayerMaskController : MonoBehaviour
             }
             
             string objTag = platform.gameObject.tag;
+            
+            // Get ALL colliders including children
+            Collider2D[] allColliders = platform.gameObject.GetComponentsInChildren<Collider2D>(true);
             Collider2D objCollider = platform.gameObject.GetComponent<Collider2D>();
             
             // Special handling for Trap tag - always collidable, only visible with Mask 2
@@ -557,11 +604,46 @@ public class PlayerMaskController : MonoBehaviour
             
             spriteRenderer.enabled = shouldBeVisible;
             
-            // Only modify collider if it exists
-            if (objCollider != null)
+            // Disable child sprite renderers too
+            foreach (SpriteRenderer childRenderer in platform.gameObject.GetComponentsInChildren<SpriteRenderer>(true))
             {
-                objCollider.enabled = shouldBeVisible;
+                childRenderer.enabled = shouldBeVisible;
+            }
+            
+            // Always set collision state based on visibility - for ALL colliders including children
+            if (allColliders.Length > 0 && playerCollider != null)
+            {
+                foreach (Collider2D col in allColliders)
+                {
+                    if (col == null) continue;
+                    
+                    if (!shouldBeVisible)
+                    {
+                        // Make invisible objects not collide with player
+                        col.enabled = false;
+                        Physics2D.IgnoreCollision(col, playerCollider, true);
+                    }
+                    else
+                    {
+                        // Make visible objects collide with player
+                        Physics2D.IgnoreCollision(col, playerCollider, false);
+                        col.enabled = true;
+                    }
+                }
+                
+                if (!shouldBeVisible)
+                {
+                    Debug.Log($"Ignoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
+                    disabledCount++;
+                }
+                else
+                {
+                    Debug.Log($"Restoring collision with {platform.gameObject.name} ({allColliders.Length} colliders) (tag: {objTag})");
+                    enabledCount++;
+                }
             }
         }
+        
+        Debug.Log($"ShowObject complete - Active Mask: {activeMask}, Disabled: {disabledCount}, Enabled: {enabledCount}");
     }
 }

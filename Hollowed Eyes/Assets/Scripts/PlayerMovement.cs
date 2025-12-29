@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private GameObject spriteHolder;
 
     private bool hasUsedGroundJump = false;
+    private bool hasUsedAirJump = false; // Track if double jumped
     
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -50,10 +51,11 @@ public class PlayerMovement : MonoBehaviour
     {
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         
-        // Reset ground jump when landing
+        // Reset jumps
         if (isGrounded && !wasGrounded)
         {
             hasUsedGroundJump = false;
+            hasUsedAirJump = false;
         }
         
         wasGrounded = isGrounded;
@@ -81,17 +83,19 @@ public class PlayerMovement : MonoBehaviour
         {
             if (isGrounded && !hasUsedGroundJump)
             {
+                // single jump
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 hasUsedGroundJump = true;
             }
-            else
+            else if (!hasUsedAirJump)
             {
+                // double jump
                 if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.CanUseBonusJump())
                 {
-                    // Consume a mask use
                     if (PlayerMaskController.Instance.UseBonusJump())
                     {
                         rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                        hasUsedAirJump = true;
                     }
                 }
             }
