@@ -32,7 +32,7 @@ public class CameraFitToBackground : MonoBehaviour
         Bounds bgBounds = background.bounds;
 
         // Fit height exactly
-        cam.orthographicSize = bgBounds.size.y * 0.5f;
+        cam.orthographicSize = bgBounds.size.x * 0.5f;
 
         // Center camera on background
         transform.position = new Vector3(
