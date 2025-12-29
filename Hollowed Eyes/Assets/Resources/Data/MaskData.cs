@@ -11,4 +11,5 @@ public class MaskData
     public string keybind;
     public string uiColor;
     public string unlockMessage;  // Message shown when mask is unlocked
+    public float ypos;
 }

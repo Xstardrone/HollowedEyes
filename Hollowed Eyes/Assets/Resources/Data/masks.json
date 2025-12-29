@@ -10,7 +10,8 @@
       "lockPath": "Lock",
       "keybind": "1",
       "uiColor": "#EBE8E2",
-      "unlockMessage": "You have unlocked the Basic Mask! This mask reveals base platforms."
+      "unlockMessage": "You have unlocked the Basic Mask! This mask reveals base platforms.",
+      "ypos": 4
     },
     {
       "maskName": "Trap",
@@ -22,7 +23,8 @@
       "lockPath": "Lock",
       "keybind": "2",
       "uiColor": "#FF3A3A",
-      "unlockMessage": "You have unlocked the Trap Mask! This allows you to slow down time briefly. Different masks will also let you see different objects! Traps will affect you regardless of visibility."
+      "unlockMessage": "You have unlocked the Trap Mask! This allows you to slow down time briefly. Different masks will also let you see different objects! Traps will affect you regardless of visibility.",
+      "ypos": 0
     },
     {
       "maskName": "Rope",
@@ -34,7 +36,8 @@
       "lockPath": "Lock",
       "keybind": "3",
       "uiColor": "#7C3AED",
-      "unlockMessage": "You have unlocked the Rope Mask! This mask allows you to shoot ropes to nodes and swing across gaps."
+      "unlockMessage": "You have unlocked the Rope Mask! This mask allows you to shoot ropes to nodes and swing across gaps.",
+      "ypos": -3
     },
     {
       "maskName": "Phase",
@@ -46,7 +49,8 @@
       "lockPath": "Lock",
       "keybind": "4",
       "uiColor": "#FACC15",
-      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special, yellow tinted blocks for a short time. It has infinite uses but a 5 second cooldown. Phase blocks and traps still hit you regardless of visibility."
+      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special, yellow tinted blocks for a short time. It has infinite uses but a 5 second cooldown. Phase blocks and traps still hit you regardless of visibility.",
+      "ypos": 0
     }
   ]
 }

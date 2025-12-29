@@ -89,6 +89,7 @@ public class MaskSlotUI : MonoBehaviour
         }
         icon.rectTransform.sizeDelta = new Vector2(iconSize, iconSize);
         icon.rectTransform.anchoredPosition = Vector2.zero;
+        icon.transform.position = new Vector3(icon.transform.position.x, icon.transform.position.y + data.ypos, icon.transform.position.z);
         CenterAnchor(icon.rectTransform);
         
         //Lock Overlay
