@@ -3367,7 +3367,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -3476485086895410325, guid: 06ab125fe99e849af9955cdaffc11612, type: 3}
       propertyPath: resetPosition.x
-      value: 25.79
+      value: -25.79
       objectReference: {fileID: 0}
     - target: {fileID: -3476485086895410325, guid: 06ab125fe99e849af9955cdaffc11612, type: 3}
       propertyPath: resetPosition.y
