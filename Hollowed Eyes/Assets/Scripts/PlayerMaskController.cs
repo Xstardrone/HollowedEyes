@@ -21,8 +21,8 @@ public class PlayerMaskController : MonoBehaviour
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
         { 3, new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
-        { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
-        { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
+        { 4, new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
+        { 5, new Dictionary<int, int> { {1, 300}, {2, 200}, {3, 200}, {4, 5} } },
     };
 
     MaskDatabase database;
@@ -45,7 +45,7 @@ public class PlayerMaskController : MonoBehaviour
 
     public GameObject swingNode;
     private GameObject ropeRenderer;
-    private bool isRopeActive = false;
+    public bool isRopeActive = false;
     
     [Header("Rope Settings")]
     [SerializeField] private float maxRopeDistance = 15f;
@@ -453,11 +453,14 @@ public class PlayerMaskController : MonoBehaviour
             gameObject.GetComponent<PlayerMovement>().enabled = false;
             ropeRenderer.GetComponent<RopeRendering>().enabled = true;
             isRopeActive = true;
-            anim.SetBool("Rope", true);
+            if (anim != null)
+            {
+                anim.SetBool("Rope", true);
+            }
         }
     }
     
-    void CutRope()
+    public void CutRope()
     {
         if (!isRopeActive) return;
         
@@ -531,9 +534,9 @@ public class PlayerMaskController : MonoBehaviour
         isPhasing = true;
         phaseEndTime = Time.time + 1f;
         
-        // Find all objects with "Phasable" tag and ignore collision
-        GameObject[] phasableObjects = GameObject.FindGameObjectsWithTag("Phasable");
-        foreach (GameObject obj in phasableObjects)
+        // Find all objects with "Phaseable" tag and ignore collision
+        GameObject[] PhaseableObjects = GameObject.FindGameObjectsWithTag("Phaseable");
+        foreach (GameObject obj in PhaseableObjects)
         {
             Collider2D objCollider = obj.GetComponent<Collider2D>();
             if (objCollider != null && playerCollider != null)
@@ -568,9 +571,9 @@ public class PlayerMaskController : MonoBehaviour
         phaseCooldown = maxPhaseCooldown;
         lastDisplayedCooldown = Mathf.CeilToInt(phaseCooldown);
         
-        // Re-enable collision with all Phasable objects
-        GameObject[] phasableObjects = GameObject.FindGameObjectsWithTag("Phasable");
-        foreach (GameObject obj in phasableObjects)
+        // Re-enable collision with all Phaseable objects
+        GameObject[] PhaseableObjects = GameObject.FindGameObjectsWithTag("Phaseable");
+        foreach (GameObject obj in PhaseableObjects)
         {
             Collider2D objCollider = obj.GetComponent<Collider2D>();
             if (objCollider != null && playerCollider != null)
@@ -657,6 +660,23 @@ public class PlayerMaskController : MonoBehaviour
                 foreach (SpriteRenderer childRenderer in platform.gameObject.GetComponentsInChildren<SpriteRenderer>(true))
                 {
                     childRenderer.enabled = (activeMask == 2 || activeMask == 4);
+                }
+                // Keep collider always enabled (will be ignored during phase mode)
+                if (objCollider != null)
+                {
+                    objCollider.enabled = true;
+                }
+                continue;
+            }
+            
+            // Special handling for Phaseable tag - visible with Phase (4) mask, always collidable
+            if (objTag == "Phaseable")
+            {
+                spriteRenderer.enabled = (activeMask == 4);
+                // Disable child sprite renderers too
+                foreach (SpriteRenderer childRenderer in platform.gameObject.GetComponentsInChildren<SpriteRenderer>(true))
+                {
+                    childRenderer.enabled = (activeMask == 4);
                 }
                 // Keep collider always enabled (will be ignored during phase mode)
                 if (objCollider != null)

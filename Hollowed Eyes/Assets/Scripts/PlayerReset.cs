@@ -81,6 +81,12 @@ public class PlayerReset : MonoBehaviour
     {
         lastResetTime = Time.time;
 
+        // Cut any active rope before resetting
+        if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.isRopeActive)
+        {
+            PlayerMaskController.Instance.CutRope();
+        }
+
         transform.position = resetPosition;
         transform.rotation = Quaternion.Euler(0f, 0f, resetRotationZ);
 

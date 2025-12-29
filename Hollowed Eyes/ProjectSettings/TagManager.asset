@@ -4,7 +4,6 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Phasable
   - Node
   - Mask 1
   - Mask 2
@@ -12,6 +11,8 @@ TagManager:
   - Mask 4
   - Trap
   - Game Manager
+  - PhaseTrap
+  - Phaseable
   layers:
   - Default
   - TransparentFX

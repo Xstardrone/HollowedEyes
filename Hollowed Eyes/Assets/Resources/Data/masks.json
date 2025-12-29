@@ -46,7 +46,7 @@
       "lockPath": "Lock",
       "keybind": "4",
       "uiColor": "#FACC15",
-      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special blocks for a short time. It has infinite uses but a 5 second cooldown."
+      "unlockMessage": "You have unlocked the Phase Mask! This mask allows you to phase through special, yellow tinted blocks for a short time. It has infinite uses but a 5 second cooldown. Phase blocks and traps still hit you regardless of visibility."
     }
   ]
 }
