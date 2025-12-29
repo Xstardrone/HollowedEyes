@@ -9,6 +9,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.5f;
 
+    [SerializeField] private GameObject spriteHolder;
+
     private bool hasUsedGroundJump = false;
     
     private Rigidbody2D rb;
@@ -63,10 +65,12 @@ public class PlayerMovement : MonoBehaviour
             if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed) {
                 horizontalInput = -1f;
                 facing = "left";
+                spriteHolder.transform.localScale = new Vector3(-1, 1, 1);
             }
             if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed) {
                 horizontalInput = 1f;
                 facing = "right";
+                spriteHolder.transform.localScale = new Vector3(1, 1, 1);
             }
         }
         

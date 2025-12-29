@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 8102869397289074452, guid: 9956172c65c174610a8338bcbd628447, type: 3}
+  m_Sprite: {fileID: 5893619009731336077, guid: bc57b9e5efe674bd79a423d2dfc5fb99, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -102,7 +102,7 @@ Animator:
   m_GameObject: {fileID: 7220003593804653296}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e7f795d5cba5b4c1b8c1b13d74d260fd, type: 2}
+  m_Controller: {fileID: 9100000, guid: 939142a18c06a47f0bbe6ee1fc06ba7a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -203,7 +203,7 @@ Rigidbody2D:
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_AngularDamping: 0
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -235,6 +235,7 @@ MonoBehaviour:
     m_Bits: 8
   groundCheck: {fileID: 0}
   groundCheckRadius: 0.52
+  spriteHolder: {fileID: 7220003593804653296}
 --- !u!114 &-3345958093588916307
 MonoBehaviour:
   m_ObjectHideFlags: 0
