@@ -51,9 +51,9 @@ public class MaskMessagePanel : MonoBehaviour
         Debug.Log("Checking mask unlock for level: " + currentLevel);
         
         // Skip level 1 (Basic mask shown in tutorial)
-        if (currentLevel <= 1)
+        if (currentLevel <= 1 || currentLevel >= 5)
         {
-            Debug.Log("Level 1 or below, skipping mask message");
+            Debug.Log("Level 1 or below or 5+, skipping mask message");
             return;
         }
         
