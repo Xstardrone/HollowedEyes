@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float groundCheckRadius = 0.5f;
 
     [SerializeField] private GameObject spriteHolder;
+    private Animator anim;
 
     private bool hasUsedGroundJump = false;
     private bool hasUsedAirJump = false; // Track if double jumped
@@ -45,12 +46,24 @@ public class PlayerMovement : MonoBehaviour
             BoxCollider2D collider = gameObject.AddComponent<BoxCollider2D>();
             collider.size = new Vector2(1f, 1f);
         }
+
+        anim = spriteHolder.GetComponent<Animator>();
     }
 
     void Update()
     {
+
+        Debug.Log(anim.GetCurrentAnimatorClipInfo(0)[0].clip.name);
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
-        
+        anim.SetBool("onGround", isGrounded);
+
+
+        if (isGrounded)
+        {
+            anim.SetTrigger("hitGround");
+            anim.ResetTrigger("Jump");
+        }
+
         // Reset jumps
         if (isGrounded && !wasGrounded)
         {
@@ -77,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
         }
         
         rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, rb.linearVelocity.y);
+        anim.SetFloat("Speed", Mathf.Abs(horizontalInput));
         
         // Jump
         if (Keyboard.current != null && (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame))
@@ -85,6 +99,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 // single jump
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                anim.SetTrigger("Jump");
                 hasUsedGroundJump = true;
             }
             else if (!hasUsedAirJump)
@@ -100,6 +115,8 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
+
+        anim.SetFloat("VertSpeed", rb.linearVelocityY);
     }
 
     void OnDrawGizmosSelected()
