@@ -20,6 +20,8 @@ public class PlayerMovement : MonoBehaviour
     private bool wasGrounded = false;
     private float horizontalInput;
     private string facing = "right";
+    private bool landCooldown = true;
+    private bool animJumped = false;
 
     void Start()
     {
@@ -52,15 +54,14 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
         anim.SetBool("onGround", isGrounded);
 
-
-        if (isGrounded)
+        if (isGrounded && landCooldown && animJumped)
         {
+            Debug.Log("Landing");
             anim.SetTrigger("hitGround");
-            anim.ResetTrigger("Jump");
+            animJumped = false;
         }
 
         // Reset jumps
@@ -99,6 +100,10 @@ public class PlayerMovement : MonoBehaviour
                 // single jump
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
+                Debug.Log("Jump");
+                landCooldown = false;
+                animJumped = true;
+                Invoke("EnableLandAnimation", 0.1f);
                 hasUsedGroundJump = true;
             }
             else if (!hasUsedAirJump)
@@ -153,5 +158,10 @@ public class PlayerMovement : MonoBehaviour
     public void ResetAirJump()
     {
         hasUsedAirJump = false;
+    }
+
+    public void EnableLandAnimation()
+    {
+        landCooldown = true;
     }
 }
