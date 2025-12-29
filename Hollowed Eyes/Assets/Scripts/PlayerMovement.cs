@@ -59,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded && landCooldown && animJumped)
         {
-            Debug.Log("Landing");
             anim.SetTrigger("hitGround");
             animJumped = false;
         }
@@ -100,7 +99,6 @@ public class PlayerMovement : MonoBehaviour
                 // single jump
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 anim.SetTrigger("Jump");
-                Debug.Log("Jump");
                 landCooldown = false;
                 animJumped = true;
                 Invoke("EnableLandAnimation", 0.1f);

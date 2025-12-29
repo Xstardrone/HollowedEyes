@@ -13,6 +13,7 @@ TagManager:
   - Game Manager
   - PhaseTrap
   - Phaseable
+  - Main Menu
   layers:
   - Default
   - TransparentFX

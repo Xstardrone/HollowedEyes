@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections.Generic;
+using System;
 
 public class PersistentObjectManager : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class PersistentObjectManager : MonoBehaviour
 
     [Header("Tag → Scene Disable Rules")]
     public List<TagSceneRule> rules = new List<TagSceneRule>();
+
+    List<GameObject> taggedObjects = new List<GameObject>();
 
     void Awake()
     {
@@ -39,15 +42,28 @@ public class PersistentObjectManager : MonoBehaviour
         {
             if (string.IsNullOrEmpty(rule.tag)) continue;
 
-            GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag(rule.tag);
+            taggedObjects = new List<GameObject>();
+
+            foreach (GameObject g in FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                if (g.CompareTag(rule.tag))
+                {
+                    taggedObjects.Add(g);
+                    Debug.Log("Found object: " + g.name);
+                }
+            }
 
             bool shouldDisable = rule.disableInScenes.Contains(sceneName);
 
             foreach (GameObject obj in taggedObjects)
             {
-                if (obj == null) continue;
-
-                obj.SetActive(!shouldDisable);
+                if (sceneName == "Main Menu")
+                {
+                    Destroy(obj);
+                } else
+                {
+                    obj.SetActive(!shouldDisable);
+                }
             }
         }
     }
