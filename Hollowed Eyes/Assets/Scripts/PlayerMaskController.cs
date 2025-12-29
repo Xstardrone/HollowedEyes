@@ -20,7 +20,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
         { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 4}, {2, 1}, {3, 7}, {4, 0} } },
+        { 3, new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
         { 4, new Dictionary<int, int> { {1, 2}, {2, 2}, {3, 2}, {4, 5} } },
         { 5, new Dictionary<int, int> { {1, 3}, {2, 2}, {3, 2}, {4, 5} } },
     };
