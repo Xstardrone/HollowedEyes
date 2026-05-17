@@ -27,6 +27,9 @@ public class CameraFitToBackground : MonoBehaviour
     [Tooltip("Try to fill the entire screen first, then fall back to contain when crop is too high")]
     [SerializeField] private bool preferFullscreenFill = true;
 
+    [Tooltip("Always use contain mode when the game is windowed or running as WebGL")]
+    [SerializeField] private bool windowedAndWebUseContainMode = true;
+
     [Tooltip("Maximum crop fraction allowed on either axis before fallback to contain mode")]
     [SerializeField, Range(0f, 0.45f)] private float maxAllowedCropPerAxis = 0.2f;
 
@@ -119,7 +122,8 @@ public class CameraFitToBackground : MonoBehaviour
         float cropY = Mathf.Clamp01((bgHeight - visibleHeightAtFill) / bgHeight);
 
         bool fillAcceptable = cropX <= maxAllowedCropPerAxis && cropY <= maxAllowedCropPerAxis;
-        float targetSize = (preferFullscreenFill && fillAcceptable) ? fillSize : containSize;
+        bool useContainMode = windowedAndWebUseContainMode && (Application.platform == RuntimePlatform.WebGLPlayer || !Screen.fullScreen);
+        float targetSize = (useContainMode || !preferFullscreenFill || !fillAcceptable) ? containSize : fillSize;
 
         if (profile != null)
             targetSize *= profile.cameraZoomMultiplier;

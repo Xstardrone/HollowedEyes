@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundCheckRadius = 0.5f;
     [SerializeField] private GameObject spriteHolder;
-    [SerializeField] private float groundContactBelowCenterThreshold = 0.12f;
+    [SerializeField] private float coyoteTime = 0.12f;
 
     private Animator anim;
     private bool hasUsedGroundJump = false;
@@ -25,7 +25,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float jumpResetCooldown = 0f;
     private const float JUMP_RESET_DELAY = 0.15f;
-    private readonly ContactPoint2D[] contactPoints = new ContactPoint2D[32];
+    private float coyoteCounter = 0f;
 
     void Start()
     {
@@ -62,6 +62,19 @@ public class PlayerMovement : MonoBehaviour
         isGrounded = EvaluateGroundedState();
         anim.SetBool("onGround", isGrounded);
 
+        if (isGrounded)
+        {
+            coyoteCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteCounter -= Time.deltaTime;
+            if (coyoteCounter < 0f)
+            {
+                coyoteCounter = 0f;
+            }
+        }
+
         if (isGrounded && landCooldown && animJumped)
         {
             anim.SetTrigger("hitGround");
@@ -87,6 +100,7 @@ public class PlayerMovement : MonoBehaviour
         {
             bool leftPressed = Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed;
             bool rightPressed = Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed;
+            bool canUseGroundJump = isGrounded || coyoteCounter > 0f;
 
             if (leftPressed)
             {
@@ -110,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
 
             if (Keyboard.current.wKey.wasPressedThisFrame || Keyboard.current.upArrowKey.wasPressedThisFrame)
             {
-                if (isGrounded && !hasUsedGroundJump)
+                if (canUseGroundJump && !hasUsedGroundJump)
                 {
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                     anim.SetTrigger("Jump");
@@ -118,9 +132,10 @@ public class PlayerMovement : MonoBehaviour
                     animJumped = true;
                     Invoke("EnableLandAnimation", 0.1f);
                     hasUsedGroundJump = true;
+                    coyoteCounter = 0f;
                     jumpResetCooldown = JUMP_RESET_DELAY;
                 }
-                else if (!isGrounded && !hasUsedAirJump)
+                else if (!canUseGroundJump && !hasUsedAirJump)
                 {
                     if (PlayerMaskController.Instance != null && PlayerMaskController.Instance.CanUseBonusJump())
                     {
@@ -147,30 +162,11 @@ public class PlayerMovement : MonoBehaviour
             return false;
         }
 
-        int contactCount = playerCollider.GetContacts(contactPoints);
-        float playerCenterY = playerCollider.bounds.center.y;
+        Bounds bounds = playerCollider.bounds;
+        Vector2 footProbeCenter = new Vector2(bounds.center.x, bounds.min.y + 0.05f);
+        Vector2 footProbeSize = new Vector2(Mathf.Max(0.05f, bounds.size.x * 0.8f), 0.1f);
 
-        for (int i = 0; i < contactCount; i++)
-        {
-            ContactPoint2D contact = contactPoints[i];
-            Collider2D other = contact.collider;
-            if (other == null)
-                continue;
-
-            int otherLayerMask = 1 << other.gameObject.layer;
-            if ((groundLayer.value & otherLayerMask) == 0)
-                continue;
-
-            bool isBelowCenter = contact.point.y <= playerCenterY - groundContactBelowCenterThreshold;
-            bool isUpwardEnough = contact.normal.y > 0.55f;
-
-            if (isUpwardEnough && isBelowCenter)
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return Physics2D.OverlapBox(footProbeCenter, footProbeSize, 0f, groundLayer) != null;
     }
 
     void OnDrawGizmosSelected()

@@ -252,7 +252,9 @@ MonoBehaviour:
   activeMask: 0
   anim: {fileID: 1666394138686379073}
   maskSwap: {fileID: 96729267658190365}
+  isPhasing: 0
   swingNode: {fileID: 0}
+  isRopeActive: 0
   maxRopeDistance: 12
 --- !u!114 &6462021379514323401
 MonoBehaviour:
@@ -284,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerReset
   resetPosition: {x: 0, y: 0, z: 0}
+  resetRotationZ: 0
   resetSound: {fileID: 8300000, guid: 912065530fa6942058f1eca4c20c2a10, type: 3}
   soundVolume: 0.4
   backgroundObject: {fileID: 0}
