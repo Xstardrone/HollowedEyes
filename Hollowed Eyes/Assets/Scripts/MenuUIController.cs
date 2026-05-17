@@ -5,6 +5,8 @@ public class MenuUIController : MonoBehaviour
     public GameObject creditsPanel;
     public GameObject mainMenu;
 
+    public GameObject levelsMenu;
+
     public void ShowCredits()
     {
         mainMenu.SetActive(false);
@@ -15,5 +17,11 @@ public class MenuUIController : MonoBehaviour
     {
         creditsPanel.SetActive(false);
         mainMenu.SetActive(true);
+    }
+
+    public void ShowLevels()
+    {
+        mainMenu.SetActive(false);
+        levelsMenu.SetActive(true);
     }
 }

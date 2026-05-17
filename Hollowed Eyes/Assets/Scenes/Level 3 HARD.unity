@@ -455,6 +455,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1315956812}
     m_Modifications:
+    - target: {fileID: -6697922539767041932, guid: 018ff7b41e1095745b9c2f74c68502f4, type: 3}
+      propertyPath: sceneToLoad
+      value: Level 4 HARD
+      objectReference: {fileID: 0}
     - target: {fileID: 2139763864961190813, guid: 018ff7b41e1095745b9c2f74c68502f4, type: 3}
       propertyPath: m_Name
       value: Level 3 Exit
@@ -1076,6 +1080,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFitToBackground
   background: {fileID: 1287289560}
+  keepUpdatedAtRuntime: 1
+  forceFullscreenOnSupportedPlatforms: 1
+  preferFullscreenFill: 1
+  maxAllowedCropPerAxis: 0.2
+  updateCanvasScalers: 1
+  canvasMatchWidthOrHeight: 0.5
+  resolutionProfiles:
+  - minWidth: 3840
+    minHeight: 2160
+    uiReferenceResolution: {x: 3840, y: 2160}
+    cameraZoomMultiplier: 1
+  - minWidth: 2560
+    minHeight: 1440
+    uiReferenceResolution: {x: 2560, y: 1440}
+    cameraZoomMultiplier: 1
+  - minWidth: 1920
+    minHeight: 1080
+    uiReferenceResolution: {x: 1920, y: 1080}
+    cameraZoomMultiplier: 1
+  - minWidth: 1366
+    minHeight: 768
+    uiReferenceResolution: {x: 1366, y: 768}
+    cameraZoomMultiplier: 1
+  - minWidth: 1280
+    minHeight: 720
+    uiReferenceResolution: {x: 1280, y: 720}
+    cameraZoomMultiplier: 1
 --- !u!4 &519632255 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5723175162848493479, guid: 773e417b5a2c2eb4590fec62dc3c718d, type: 3}

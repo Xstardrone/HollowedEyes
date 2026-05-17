@@ -770,6 +770,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraFitToBackground
   background: {fileID: 141438808}
+  keepUpdatedAtRuntime: 1
+  forceFullscreenOnSupportedPlatforms: 1
+  preferFullscreenFill: 1
+  maxAllowedCropPerAxis: 0.2
+  updateCanvasScalers: 1
+  canvasMatchWidthOrHeight: 0.5
+  resolutionProfiles:
+  - minWidth: 3840
+    minHeight: 2160
+    uiReferenceResolution: {x: 3840, y: 2160}
+    cameraZoomMultiplier: 1
+  - minWidth: 2560
+    minHeight: 1440
+    uiReferenceResolution: {x: 2560, y: 1440}
+    cameraZoomMultiplier: 1
+  - minWidth: 1920
+    minHeight: 1080
+    uiReferenceResolution: {x: 1920, y: 1080}
+    cameraZoomMultiplier: 1
+  - minWidth: 1366
+    minHeight: 768
+    uiReferenceResolution: {x: 1366, y: 768}
+    cameraZoomMultiplier: 1
+  - minWidth: 1280
+    minHeight: 720
+    uiReferenceResolution: {x: 1280, y: 720}
+    cameraZoomMultiplier: 1
 --- !u!4 &542184196 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5517500409693846259, guid: a60460ff2f809ab4cb13198c6d8621a7, type: 3}
@@ -984,6 +1011,10 @@ PrefabInstance:
     - target: {fileID: 1274038422426860694, guid: a60460ff2f809ab4cb13198c6d8621a7, type: 3}
       propertyPath: m_Name
       value: Level 1 Exit
+      objectReference: {fileID: 0}
+    - target: {fileID: 3595204309225512129, guid: a60460ff2f809ab4cb13198c6d8621a7, type: 3}
+      propertyPath: sceneToLoad
+      value: Level 2 HARD
       objectReference: {fileID: 0}
     - target: {fileID: 5517500409693846259, guid: a60460ff2f809ab4cb13198c6d8621a7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1494,7 +1525,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 855774181}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d40e5405b149a9747b0dbebfd130a853, type: 3}
   m_Name: 
