@@ -9,19 +9,49 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Menu.unity
     guid: 7199c64263fe6da4985fbde1d340c9f1
   - enabled: 1
-    path: Assets/Scenes/Level 1 HARD.unity
+    path: Assets/Scenes/EASY/Level 1 EASY.unity
+    guid: daaea88fd46f8dd4380724dd51907d4d
+  - enabled: 1
+    path: Assets/Scenes/EASY/Level 2 EASY.unity
+    guid: 0a56c43cd66f951409cb7b803ea80abf
+  - enabled: 1
+    path: Assets/Scenes/EASY/Level 3 EASY.unity
+    guid: 4e0dfda0a6db93640b62cc49f217cf0c
+  - enabled: 1
+    path: Assets/Scenes/EASY/Level 4 EASY.unity
+    guid: c0dd29f93f5d3c348b776966ba3c1776
+  - enabled: 1
+    path: Assets/Scenes/EASY/Level 5 EASY.unity
+    guid: 758e5fd5be702944a85ba145a309d20f
+  - enabled: 1
+    path: Assets/Scenes/MEDIUM/Level 1 MEDIUM.unity
+    guid: 5082ce318f386364b90c3a835b5d419c
+  - enabled: 1
+    path: Assets/Scenes/MEDIUM/Level 2 MEDIUM.unity
+    guid: 0a0c78c60d144924e8b93f91c2ed4527
+  - enabled: 1
+    path: Assets/Scenes/MEDIUM/Level 3 MEDIUM.unity
+    guid: 0547146cadfd9184bb65f12ed87340cd
+  - enabled: 1
+    path: Assets/Scenes/MEDIUM/Level 4 MEDIUM.unity
+    guid: b66b61d7ad0b80b408603b6feda5089e
+  - enabled: 1
+    path: Assets/Scenes/MEDIUM/Level 5 MEDIUM.unity
+    guid: d4bb1d5b54ed1044f94561358022c222
+  - enabled: 1
+    path: Assets/Scenes/HARD/Level 1 HARD.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
-    path: Assets/Scenes/Level 2 HARD.unity
+    path: Assets/Scenes/HARD/Level 2 HARD.unity
     guid: d3e3964895345ec488a56a00fc16b4c4
   - enabled: 1
-    path: Assets/Scenes/Level 3 HARD.unity
+    path: Assets/Scenes/HARD/Level 3 HARD.unity
     guid: 75276a5cd85e1b6498bf621f64596fa0
   - enabled: 1
-    path: Assets/Scenes/Level 4 HARD.unity
+    path: Assets/Scenes/HARD/Level 4 HARD.unity
     guid: bb54ef7dc845fba45990b8e8a614fe10
   - enabled: 1
-    path: Assets/Scenes/Level 5 HARD.unity
+    path: Assets/Scenes/HARD/Level 5 HARD.unity
     guid: 5b5b1213d7220334a9137efdf1fc3604
   - enabled: 1
     path: Assets/Scenes/End Screen.unity

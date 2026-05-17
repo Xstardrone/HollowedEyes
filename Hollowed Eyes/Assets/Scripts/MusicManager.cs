@@ -8,6 +8,7 @@ public class MusicManager : MonoBehaviour
     [System.Serializable]
     public class SceneMusic
     {
+        [Header("Scene starts with this scene name")]
         public string sceneName;
         public AudioClip music;
     }
@@ -43,7 +44,7 @@ public class MusicManager : MonoBehaviour
     {
         foreach (var entry in sceneMusic)
         {
-            if (entry.sceneName == scene.name)
+            if (scene.name.StartsWith(entry.sceneName))
             {
                 PlayMusic(entry.music);
                 return;

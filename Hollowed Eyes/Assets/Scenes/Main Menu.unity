@@ -1433,17 +1433,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneShortcutManager
   shortcuts:
-  - sceneName: Level 1
+  - sceneName: Level 1 EASY
     hotkey: 41
-  - sceneName: Level 2
+  - sceneName: Level 2 EASY
     hotkey: 42
-  - sceneName: Level 3
+  - sceneName: Level 3 EASY
     hotkey: 43
-  - sceneName: Level 4
+  - sceneName: Level 4 EASY
     hotkey: 44
   - sceneName: Main Menu
     hotkey: 45
-  - sceneName: End Menu
+  - sceneName: End Screen
     hotkey: 46
 --- !u!1 &1109344131
 GameObject:

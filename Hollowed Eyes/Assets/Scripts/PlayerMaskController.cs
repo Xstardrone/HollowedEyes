@@ -15,18 +15,32 @@ public class PlayerMaskController : MonoBehaviour
     // Mask uses remaining for current level
     public Dictionary<int, int> maskUses = new Dictionary<int, int>();
     
-    // Hardcoded uses per level: maskUsesPerLevel[level][maskNumber] = uses
-    public static Dictionary<int, Dictionary<int, int>> maskUsesPerLevel = new Dictionary<int, Dictionary<int, int>>
+    // Mask uses per scene (by scene name, supports difficulty variants like "Level 1 EASY", "Level 1 HARD")
+    // Key: scene name, Value: Dictionary<maskNumber, uses>
+    public static Dictionary<string, Dictionary<int, int>> maskUsesPerLevel = new Dictionary<string, Dictionary<int, int>>
     {
-        { 1, new Dictionary<int, int> { {1, 3}, {2, 0}, {3, 0}, {4, 0} } },
-        { 2, new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
-        { 3, new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
-        { 4, new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
-        { 5, new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
+        { "Level 1 EASY", new Dictionary<int, int> { {1, 8}, {2, 0}, {3, 0}, {4, 0} } },
+        { "Level 2 EASY", new Dictionary<int, int> { {1, 12}, {2, 4}, {3, 0}, {4, 0} } },
+        { "Level 3 EASY", new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
+        { "Level 4 EASY", new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
+        { "Level 5 EASY", new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
+
+        { "Level 1 MEDIUM", new Dictionary<int, int> { {1, 4}, {2, 0}, {3, 0}, {4, 0} } },
+        { "Level 2 MEDIUM", new Dictionary<int, int> { {1, 12}, {2, 4}, {3, 0}, {4, 0} } },
+        { "Level 3 MEDIUM", new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
+        { "Level 4 MEDIUM", new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
+        { "Level 5 MEDIUM", new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
+
+
+        { "Level 1 HARD", new Dictionary<int, int> { {1, 1}, {2, 0}, {3, 0}, {4, 0} } },
+        { "Level 2 HARD", new Dictionary<int, int> { {1, 8}, {2, 4}, {3, 0}, {4, 0} } },
+        { "Level 3 HARD", new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
+        { "Level 4 HARD", new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
+        { "Level 5 HARD", new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
     };
 
     MaskDatabase database;
-    int lastKnownLevel = -1;
+    string lastKnownLevelName = "";
     bool isReady = false;
     
     // Trap ability (time slow)
@@ -131,27 +145,25 @@ public class PlayerMaskController : MonoBehaviour
         activeMask = Mathf.Clamp(level, 1, 4);
         setMaskColor();
         showObject();
-        LoadUsesForLevel(level);
-        lastKnownLevel = level;
+        LoadUsesForLevel(LevelGetter.Instance.CurrentLevelName);
+        lastKnownLevelName = LevelGetter.Instance.CurrentLevelName;
     }
     
-    void LoadUsesForLevel(int level)
+    void LoadUsesForLevel(string levelName)
     {
         maskUses.Clear();
         
-        if (maskUsesPerLevel.ContainsKey(level))
+        if (maskUsesPerLevel.ContainsKey(levelName))
         {
-            foreach (var pair in maskUsesPerLevel[level])
+            foreach (var pair in maskUsesPerLevel[levelName])
             {
                 maskUses[pair.Key] = pair.Value;
             }
         }
         else
         {
-            for (int i = 1; i <= 4; i++)
-            {
-                maskUses[i] = (i <= level) ? 2 : 0;
-            }
+            Debug.LogError($"Scene '{levelName}' not found in maskUsesPerLevel dictionary. Add an entry to PlayerMaskController.maskUsesPerLevel for this scene.");
+            return;
         }
         
         RefreshAllMaskSlots();
@@ -161,8 +173,7 @@ public class PlayerMaskController : MonoBehaviour
     {
         if (LevelGetter.Instance == null) return;
         
-        int currentLevel = LevelGetter.Instance.CurrentLevel;
-        LoadUsesForLevel(currentLevel);
+        LoadUsesForLevel(LevelGetter.Instance.CurrentLevelName);
         
         // Also reset Phase cooldown
         phaseCooldown = 0f;
@@ -249,15 +260,16 @@ public class PlayerMaskController : MonoBehaviour
     {
         if (LevelGetter.Instance == null) return;
         
-        int currentLevel = LevelGetter.Instance.CurrentLevel;
-        if (currentLevel != lastKnownLevel)
+        string currentLevelName = LevelGetter.Instance.CurrentLevelName;
+        if (currentLevelName != lastKnownLevelName)
         {
-            lastKnownLevel = currentLevel;
-            activeMask = Mathf.Clamp(currentLevel, 1, 4);
+            lastKnownLevelName = currentLevelName;
+            int level = LevelGetter.Instance.CurrentLevel;
+            activeMask = Mathf.Clamp(level, 1, 4);
             setMaskColor();
             showObject();
             anim.SetInteger("activeMask", activeMask);
-            LoadUsesForLevel(currentLevel);
+            LoadUsesForLevel(currentLevelName);
         }
     }
     

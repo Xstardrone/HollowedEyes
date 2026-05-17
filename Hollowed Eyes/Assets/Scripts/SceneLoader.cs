@@ -10,12 +10,12 @@ public class SceneLoader : MonoBehaviour
 
     public void LoadLevel1Medium()
     {
-        SceneManager.LoadScene("Level 1 Medium");
+        SceneManager.LoadScene("Level 1 MEDIUM");
     }
 
     public void LoadLevel1Easy()
     {
-        SceneManager.LoadScene("Level 1 Easy");
+        SceneManager.LoadScene("Level 1 EASY");
     }
 
     public void LoadMainMenu()

@@ -15,10 +15,10 @@ public class SceneShortcutManager : MonoBehaviour
     [Header("Scene Shortcuts (Hold Shift + Key)")]
     public List<SceneShortcut> shortcuts = new List<SceneShortcut>
     {
-        new SceneShortcut { sceneName = "Level 1", hotkey = Key.Digit1 },
-        new SceneShortcut { sceneName = "Level 2", hotkey = Key.Digit2 },
-        new SceneShortcut { sceneName = "Level 3", hotkey = Key.Digit3 },
-        new SceneShortcut { sceneName = "Level 4", hotkey = Key.Digit4 },
+        new SceneShortcut { sceneName = "Level 1 EASY", hotkey = Key.Digit1 },
+        new SceneShortcut { sceneName = "Level 2 EASY", hotkey = Key.Digit2 },
+        new SceneShortcut { sceneName = "Level 3 EASY", hotkey = Key.Digit3 },
+        new SceneShortcut { sceneName = "Level 4 EASY", hotkey = Key.Digit4 },
         new SceneShortcut { sceneName = "Main Menu", hotkey = Key.Digit5 },
         new SceneShortcut { sceneName = "End Menu", hotkey = Key.Digit6 }
     };

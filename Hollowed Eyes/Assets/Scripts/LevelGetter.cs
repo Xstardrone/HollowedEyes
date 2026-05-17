@@ -6,6 +6,7 @@ public class LevelGetter : MonoBehaviour
 {
     public static LevelGetter Instance;
     public int CurrentLevel { get; private set; }
+    public string CurrentLevelName { get; private set; }
 
     void Awake()
     {
@@ -36,6 +37,7 @@ public class LevelGetter : MonoBehaviour
     
     void ParseCurrentScene(Scene scene)
     {
+        CurrentLevelName = scene.name;
         Match match = Regex.Match(scene.name, @"\d+");
         CurrentLevel = match.Success ? int.Parse(match.Value) : 0;
     }
