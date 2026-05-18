@@ -682,7 +682,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6077953388584923238, guid: 47e0c4d66534ab942a04bb44dc21b26b, type: 3}
       propertyPath: sceneToLoad
-      value: Level 3 MEDIUM
+      value: Level 3 EASY
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -876,6 +876,7 @@ MonoBehaviour:
   keepUpdatedAtRuntime: 1
   forceFullscreenOnSupportedPlatforms: 1
   preferFullscreenFill: 1
+  windowedAndWebUseContainMode: 1
   maxAllowedCropPerAxis: 0.2
   updateCanvasScalers: 1
   canvasMatchWidthOrHeight: 0.5

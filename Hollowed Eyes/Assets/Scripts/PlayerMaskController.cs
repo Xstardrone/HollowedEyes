@@ -21,9 +21,9 @@ public class PlayerMaskController : MonoBehaviour
     {
         { "Level 1 EASY", new Dictionary<int, int> { {1, 8}, {2, 0}, {3, 0}, {4, 0} } },
         { "Level 2 EASY", new Dictionary<int, int> { {1, 12}, {2, 4}, {3, 0}, {4, 0} } },
-        { "Level 3 EASY", new Dictionary<int, int> { {1, 5}, {2, 1}, {3, 7}, {4, 0} } },
-        { "Level 4 EASY", new Dictionary<int, int> { {1, 0}, {2, 2}, {3, 2}, {4, 5} } },
-        { "Level 5 EASY", new Dictionary<int, int> { {1, 5}, {2, 2}, {3, 2}, {4, 5} } },
+        { "Level 3 EASY", new Dictionary<int, int> { {1, 8}, {2, 1}, {3, 7}, {4, 0} } },
+        { "Level 4 EASY", new Dictionary<int, int> { {1, 0}, {2, 4}, {3, 4}, {4, 8} } },
+        { "Level 5 EASY", new Dictionary<int, int> { {1, 12}, {2, 8}, {3, 8}, {4, 9} } },
 
         { "Level 1 MEDIUM", new Dictionary<int, int> { {1, 4}, {2, 0}, {3, 0}, {4, 0} } },
         { "Level 2 MEDIUM", new Dictionary<int, int> { {1, 12}, {2, 4}, {3, 0}, {4, 0} } },

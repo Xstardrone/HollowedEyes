@@ -12,6 +12,12 @@ public class Teleport : MonoBehaviour
     [Tooltip("Flip horizontal velocity on exit (multiply X velocity by -1)")]
     [SerializeField] private bool flipHorizontalVelocity = false;
 
+    [Tooltip("Set horizontal velocity to 0.")]
+    [SerializeField] private bool killHorizontalVelocity = false;
+
+    [Tooltip("Set vertical velocity to 0.")]
+    [SerializeField] private bool killVerticalVelocity = false;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
@@ -33,8 +39,15 @@ public class Teleport : MonoBehaviour
         if (rb != null)
         {
             Vector2 rotatedVelocity = Quaternion.Euler(0f, 0f, exitRotationZ) * velocity;
-            
-            // Optionally flip horizontal velocity
+
+            if (killHorizontalVelocity)
+            {
+                rotatedVelocity.x = 0;
+            }
+            if (killVerticalVelocity)
+            {
+                rotatedVelocity.y = 0;
+            }            
             if (flipHorizontalVelocity)
             {
                 rotatedVelocity.x = -rotatedVelocity.x;

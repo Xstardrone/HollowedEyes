@@ -26,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpResetCooldown = 0f;
     private const float JUMP_RESET_DELAY = 0.15f;
     private float coyoteCounter = 0f;
+    private bool hasResetJumpSinceLanding = false;
 
     void Start()
     {
@@ -87,10 +88,11 @@ public class PlayerMovement : MonoBehaviour
             jumpResetCooldown = 0f;
         }
 
-        if (isGrounded && !wasGrounded && jumpResetCooldown <= 0f)
+        if (isGrounded && !wasGrounded && !hasResetJumpSinceLanding)
         {
             hasUsedGroundJump = false;
             hasUsedAirJump = false;
+            hasResetJumpSinceLanding = true;
         }
 
         wasGrounded = isGrounded;
@@ -134,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
                     hasUsedGroundJump = true;
                     coyoteCounter = 0f;
                     jumpResetCooldown = JUMP_RESET_DELAY;
+                    hasResetJumpSinceLanding = false;
                 }
                 else if (!canUseGroundJump && !hasUsedAirJump)
                 {
@@ -144,9 +147,15 @@ public class PlayerMovement : MonoBehaviour
                             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                             hasUsedAirJump = true;
                             jumpResetCooldown = JUMP_RESET_DELAY;
+                            hasResetJumpSinceLanding = false;
                         }
                     }
                 }
+            }
+
+            if (Keyboard.current.rKey.wasPressedThisFrame)
+            {
+                ResetMovementState();
             }
         }
 
@@ -207,5 +216,20 @@ public class PlayerMovement : MonoBehaviour
     public void EnableLandAnimation()
     {
         landCooldown = true;
+    }
+
+    private void ResetMovementState()
+    {
+        hasUsedGroundJump = false;
+        hasUsedAirJump = false;
+        isGrounded = false;
+        wasGrounded = false;
+        jumpResetCooldown = 0f;
+        coyoteCounter = 0f;
+        landCooldown = true;
+        animJumped = false;
+        horizontalInput = 0f;
+        hasResetJumpSinceLanding = false;
+        rb.linearVelocity = Vector2.zero;
     }
 }
